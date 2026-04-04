@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ratecraft.io/sitemap.xml
+Sitemap: https://ratecrafts.com/sitemap.xml

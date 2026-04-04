@@ -22,7 +22,7 @@ export function Footer() {
               they need to build sustainable, profitable businesses.
             </p>
             <div className="flex gap-4">
-              <a href="mailto:hello@ratecraft.io" className="p-2 rounded-full bg-slate-800 hover:bg-brand-600 hover:text-white transition-all">
+              <a href="mailto:impact.me02@gmail.com" className="p-2 rounded-full bg-slate-800 hover:bg-brand-600 hover:text-white transition-all">
                 <Mail className="w-4 h-4" />
               </a>
             </div>
@@ -56,7 +56,7 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-2 text-sm text-slate-500">
             <Mail className="w-4 h-4" />
-            hello@ratecraft.io
+            impact.me02@gmail.com
           </div>
         </div>
       </div>

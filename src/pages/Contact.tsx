@@ -27,10 +27,10 @@ export default function Contact() {
                 <h3 className="font-bold text-slate-900 mb-2 text-xl">Email Us</h3>
                 <p className="text-slate-500 mb-6">For general inquiries and support.</p>
                 <a 
-                  href="mailto:hello@ratecraft.io" 
+                  href="mailto:elmoutoukmohamedyassir@gmail.com" 
                   className="text-brand-600 font-bold hover:text-brand-700 transition-colors text-lg"
                 >
-                  hello@ratecraft.io
+                  elmoutoukmohamedyassir@gmail.com
                 </a>
               </div>
 
@@ -41,10 +41,10 @@ export default function Contact() {
                 <h3 className="font-bold text-slate-900 mb-2 text-xl">Feedback</h3>
                 <p className="text-slate-500 mb-6">Suggest a new feature or tool.</p>
                 <a 
-                  href="mailto:feedback@ratecraft.io" 
+                  href="mailto:impact.me02@gmail.com" 
                   className="text-violet-600 font-bold hover:text-violet-700 transition-colors text-lg"
                 >
-                  feedback@ratecraft.io
+                  impact.me02@gmail.com
                 </a>
               </div>
             </div>
