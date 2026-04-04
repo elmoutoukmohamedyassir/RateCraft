@@ -47,7 +47,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               </Link>
             ))}
             <a
-              href="https://github.com"
+              href="https://github.com/elmoutoukmohamedyassir"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 text-slate-400 hover:text-slate-900 transition-colors"
