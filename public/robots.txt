@@ -1,0 +1,5 @@
+# Replace ratecraft.io with your actual domain
+User-agent: *
+Allow: /
+
+Sitemap: https://ratecraft.io/sitemap.xml
