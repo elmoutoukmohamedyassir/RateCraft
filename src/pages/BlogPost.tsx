@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { SEO } from '../components/SEO';
 import { motion } from 'motion/react';
@@ -365,6 +365,60 @@ const postData = {
 export default function BlogPost() {
   const { id } = useParams();
   const post = postData[id as keyof typeof postData];
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const currentUrl = useMemo(() => {
+    if (typeof window === 'undefined' || !id) return '';
+    return `${window.location.origin}/blog/${id}`;
+  }, [id]);
+
+  const shareText = useMemo(() => {
+    if (!post) return '';
+    return `${post.title} | RateCrafts Blog`;
+  }, [post]);
+
+  const handleTwitterShare = () => {
+    if (!post || !currentUrl) return;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      shareText
+    )}&url=${encodeURIComponent(currentUrl)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleLinkedInShare = () => {
+    if (!currentUrl) return;
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+      currentUrl
+    )}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleGenericShare = async () => {
+    if (!post || !currentUrl) return;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: post.title,
+          text: 'Check out this article on RateCrafts',
+          url: currentUrl,
+        });
+        return;
+      }
+
+      await navigator.clipboard.writeText(currentUrl);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (error) {
+      try {
+        await navigator.clipboard.writeText(currentUrl);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
+      } catch {
+        console.error('Failed to share or copy link', error);
+      }
+    }
+  };
 
   if (!post) {
     return (
@@ -439,17 +493,36 @@ export default function BlogPost() {
               <div className="flex items-center gap-4">
                 <span className="text-sm font-bold text-slate-900">Share this article:</span>
                 <div className="flex gap-2">
-                  <button className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-all">
+                  <button
+                    type="button"
+                    onClick={handleTwitterShare}
+                    aria-label="Share on Twitter"
+                    className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-all"
+                  >
                     <Twitter className="w-4 h-4" />
                   </button>
-                  <button className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-all">
+                  <button
+                    type="button"
+                    onClick={handleLinkedInShare}
+                    aria-label="Share on LinkedIn"
+                    className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-all"
+                  >
                     <Linkedin className="w-4 h-4" />
                   </button>
-                  <button className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-all">
+                  <button
+                    type="button"
+                    onClick={handleGenericShare}
+                    aria-label="Share or copy link"
+                    className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-all"
+                  >
                     <Share2 className="w-4 h-4" />
                   </button>
                 </div>
+                {copySuccess && (
+                  <span className="text-xs font-medium text-brand-600">Copied</span>
+                )}
               </div>
+
               <Link
                 to="/calculator"
                 className="px-6 py-3 bg-brand-600 text-white rounded-full font-bold text-sm hover:bg-brand-700 transition-all shadow-lg shadow-brand-200"
