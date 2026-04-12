@@ -5,7 +5,6 @@ import { InputField } from '../components/InputField';
 import { ResultsDisplay } from '../components/ResultsDisplay';
 import { CalculatorState, CalculationResults } from '../types';
 import { calculateRate } from '../utils/calculator';
-import { Sparkles } from 'lucide-react';
 
 const initialValues: CalculatorState = {
   desiredMonthlyIncome: 6000,
@@ -16,264 +15,99 @@ const initialValues: CalculatorState = {
   desiredProfitMarginPercentage: 10,
 };
 
+const S = {
+  sectionLabel: { fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.16em', textTransform: 'uppercase' as const, color: 'var(--color-brass-500)', marginBottom: '1.25rem', display: 'block' },
+  sectionCard: { background: 'var(--color-ink-900)', border: '1px solid var(--color-ink-800)', padding: '2rem' },
+  prose: { fontFamily: 'var(--font-sans)', fontSize: '0.875rem', fontWeight: 300, color: 'var(--color-ink-400)', lineHeight: 1.75 },
+  proseH: { fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-ink-100)', letterSpacing: '-0.01em', marginBottom: '0.75rem', marginTop: '2rem' },
+};
+
 export default function CalculatorPage() {
   const [state, setState] = useState<CalculatorState>(initialValues);
   const [results, setResults] = useState<CalculationResults>(calculateRate(initialValues));
 
-  useEffect(() => {
-    setResults(calculateRate(state));
-  }, [state]);
+  useEffect(() => { setResults(calculateRate(state)); }, [state]);
 
   const handleInputChange = (name: keyof CalculatorState, value: number) => {
     setState((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen">
-      <SEO
-        title="Freelance Hourly Rate Calculator | RateCrafts"
-        description="Use RateCrafts' free freelance hourly rate calculator to work out what you should charge based on your income goals, taxes, expenses, billable hours, and profit margin."
-      />
+    <div style={{ background: 'var(--color-ink-950)', minHeight: '100vh' }}>
+      <SEO title="Freelance Hourly Rate Calculator | RateCraft" description="Calculate your freelance hourly rate based on income goals, taxes, expenses, billable hours, and profit margin." />
 
-      <header className="pt-16 pb-12 px-4 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-3xl mx-auto"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-semibold mb-6">
-            <Sparkles className="w-3 h-3" />
-            <span>Professional Grade Calculator</span>
-          </div>
-          <h1 className="text-4xl font-bold text-slate-900 mb-4 tracking-tight">
-            Freelance Hourly Rate Calculator
+      {/* Header */}
+      <header style={{ padding: '5rem 1.5rem 3.5rem', borderBottom: '1px solid var(--color-ink-800)' }}>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="max-w-3xl">
+          <span style={S.sectionLabel}>Rate Calculator</span>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, color: 'var(--color-ink-50)', letterSpacing: '-0.03em', lineHeight: 1.05, marginBottom: '1rem' }}>
+            What should you<br /><em style={{ color: 'var(--color-brass-400)', fontStyle: 'italic' }}>actually charge?</em>
           </h1>
-          <p className="text-lg text-slate-600 leading-relaxed">
-            Determine exactly what you need to charge per hour to cover your taxes, expenses,
-            and desired take-home pay.
+          <p style={{ ...S.prose, fontSize: '1rem', maxWidth: '480px' }}>
+            Enter your financial goals and availability. Your recommended hourly rate updates in real time.
           </p>
         </motion.div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-7 space-y-8">
-            <section className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xl shadow-slate-200/50">
-              <h2 className="text-xl font-bold mb-6">1. Financial Goals</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <InputField
-                  label="Desired Monthly Income (Net)"
-                  name="desiredMonthlyIncome"
-                  value={state.desiredMonthlyIncome}
-                  onChange={handleInputChange}
-                  prefix="$"
-                  tooltip="How much you want to take home each month after taxes and expenses."
-                />
-                <InputField
-                  label="Monthly Business Expenses"
-                  name="monthlyBusinessExpenses"
-                  value={state.monthlyBusinessExpenses}
-                  onChange={handleInputChange}
-                  prefix="$"
-                  tooltip="Software, insurance, office space, marketing, etc."
-                />
-                <InputField
-                  label="Estimated Tax Percentage"
-                  name="estimatedTaxPercentage"
-                  value={state.estimatedTaxPercentage}
-                  onChange={handleInputChange}
-                  suffix="%"
-                  type="range"
-                  min={0}
-                  max={60}
-                  tooltip="Self-employment tax, income tax, etc."
-                />
-                <InputField
-                  label="Desired Profit Margin"
-                  name="desiredProfitMarginPercentage"
-                  value={state.desiredProfitMarginPercentage}
-                  onChange={handleInputChange}
-                  suffix="%"
-                  type="range"
-                  min={0}
-                  max={50}
-                  tooltip="Extra buffer for savings, growth, or unexpected costs."
-                />
+      {/* Main grid */}
+      <main className="max-w-7xl mx-auto" style={{ padding: '3rem 1.5rem 5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem', alignItems: 'start' }} className="lg:grid-cols-12">
+
+          {/* Left: inputs */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="lg:col-span-7">
+
+            {/* Financial Goals */}
+            <div style={S.sectionCard}>
+              <span style={S.sectionLabel}>01 — Financial Goals</span>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                <InputField label="Desired Monthly Income (Net)" name="desiredMonthlyIncome" value={state.desiredMonthlyIncome} onChange={handleInputChange} prefix="$" tooltip="How much you want to take home each month after taxes and expenses." />
+                <InputField label="Monthly Business Expenses" name="monthlyBusinessExpenses" value={state.monthlyBusinessExpenses} onChange={handleInputChange} prefix="$" tooltip="Software, insurance, office space, marketing, etc." />
+                <InputField label="Estimated Tax Percentage" name="estimatedTaxPercentage" value={state.estimatedTaxPercentage} onChange={handleInputChange} suffix="%" type="range" min={0} max={60} tooltip="Self-employment tax, income tax, etc." />
+                <InputField label="Desired Profit Margin" name="desiredProfitMarginPercentage" value={state.desiredProfitMarginPercentage} onChange={handleInputChange} suffix="%" type="range" min={0} max={50} tooltip="Extra buffer for savings, growth, or unexpected costs." />
               </div>
+            </div>
 
-              <div className="my-8 border-t border-slate-100" />
-
-              <h2 className="text-xl font-bold mb-6">2. Availability</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <InputField
-                  label="Weekly Billable Hours"
-                  name="weeklyBillableHours"
-                  value={state.weeklyBillableHours}
-                  onChange={handleInputChange}
-                  suffix="hrs"
-                  max={168}
-                  tooltip="Actual hours spent on client work per week."
-                />
-                <InputField
-                  label="Weeks Worked Per Month"
-                  name="weeksWorkedPerMonth"
-                  value={state.weeksWorkedPerMonth}
-                  onChange={handleInputChange}
-                  suffix="weeks"
-                  min={1}
-                  max={4.33}
-                  step={0.1}
-                  tooltip="Average number of weeks you work in a month."
-                />
+            {/* Availability */}
+            <div style={S.sectionCard}>
+              <span style={S.sectionLabel}>02 — Availability</span>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                <InputField label="Weekly Billable Hours" name="weeklyBillableHours" value={state.weeklyBillableHours} onChange={handleInputChange} suffix="hrs" max={168} tooltip="Actual hours spent on client work per week." />
+                <InputField label="Weeks Worked Per Month" name="weeksWorkedPerMonth" value={state.weeksWorkedPerMonth} onChange={handleInputChange} suffix="wks" min={1} max={4.33} step={0.1} tooltip="Average number of working weeks per month." />
               </div>
-            </section>
+            </div>
 
-            <section className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xl shadow-slate-200/50 space-y-10">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-4">
-                  How This Freelance Rate Calculator Works
-                </h2>
-                <p className="text-slate-700 leading-7 mb-4">
-                  This calculator helps you estimate a realistic hourly rate based on your income goals,
-                  taxes, business expenses, and available billable time. Instead of guessing what to
-                  charge, it gives you a more practical number based on what your freelance business
-                  actually needs to earn.
-                </p>
-                <p className="text-slate-700 leading-7 mb-4">It takes into account:</p>
-                <ul className="list-disc pl-6 space-y-2 text-slate-700">
-                  <li>Your desired monthly income</li>
-                  <li>Estimated tax percentage</li>
-                  <li>Monthly business expenses</li>
-                  <li>Weekly billable hours</li>
-                  <li>Working weeks per month</li>
-                  <li>Your desired profit margin</li>
-                </ul>
-                <p className="text-slate-700 leading-7 mt-4">
-                  Based on these inputs, the calculator estimates a recommended hourly rate and day rate
-                  that can help you price your services more confidently.
-                </p>
-              </div>
+            {/* Explainer content */}
+            <div style={{ ...S.sectionCard, paddingTop: '2.5rem' }}>
+              <span style={S.sectionLabel}>How This Works</span>
+              <p style={S.prose}>This calculator derives your minimum viable hourly rate from six inputs: desired take-home pay, tax rate, business expenses, profit margin, weekly billable hours, and working weeks per month. It works backwards from what you need to earn — not forwards from what others charge.</p>
 
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-4">Example Calculation</h2>
-                <p className="text-slate-700 leading-7 mb-4">
-                  Let’s say you want to earn <strong>$3,000 per month</strong> after covering expenses
-                  and taxes.
-                </p>
-                <ul className="list-disc pl-6 space-y-2 text-slate-700">
-                  <li>Monthly income goal: $3,000</li>
-                  <li>Tax rate: 20%</li>
-                  <li>Business expenses: $500</li>
-                  <li>Billable hours: 25 hours per week</li>
-                  <li>Weeks worked per month: 4</li>
-                </ul>
-                <p className="text-slate-700 leading-7 mt-4">
-                  In this situation, your recommended hourly rate will usually be much higher than a
-                  simple guess, because it includes taxes, real costs, and the fact that not every hour
-                  you work is billable.
-                </p>
-                <p className="text-slate-700 leading-7 mt-2">
-                  This is exactly why many freelancers undercharge at the start. A structured
-                  calculation helps you avoid that mistake.
-                </p>
-              </div>
+              <h2 style={S.proseH}>The calculation logic</h2>
+              <p style={S.prose}>First it calculates the gross monthly revenue required to yield your desired net income after taxes. It adds your monthly business expenses, then applies your profit margin buffer on top. This total is divided by your monthly billable hours to arrive at a rate.</p>
 
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-4">Who This Calculator Is For</h2>
-                <ul className="list-disc pl-6 space-y-2 text-slate-700">
-                  <li>Freelancers starting their career</li>
-                  <li>Consultants setting pricing strategies</li>
-                  <li>Designers and developers</li>
-                  <li>Digital marketers</li>
-                  <li>Coaches and service providers</li>
-                  <li>Small business owners selling time-based services</li>
-                </ul>
-                <p className="text-slate-700 leading-7 mt-4">
-                  If you sell your time, expertise, or services, this calculator gives you a stronger
-                  foundation than copying a competitor’s rates or making rough guesses.
-                </p>
-              </div>
+              <h2 style={S.proseH}>Common freelance pricing mistakes</h2>
+              <ul style={{ ...S.prose, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                {['Ignoring taxes when setting rates', 'Forgetting business expenses', 'Assuming all working hours are billable', 'Copying competitors without doing the math', 'Leaving no room for profit or savings'].map((item) => <li key={item}>{item}</li>)}
+              </ul>
 
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-4">
-                  Common Freelance Pricing Mistakes
-                </h2>
-                <ul className="list-disc pl-6 space-y-2 text-slate-700">
-                  <li>Ignoring taxes when setting rates</li>
-                  <li>Forgetting business expenses</li>
-                  <li>Assuming all working hours are billable</li>
-                  <li>Copying competitors without doing the math</li>
-                  <li>Leaving no room for profit</li>
-                </ul>
-                <p className="text-slate-700 leading-7 mt-4">
-                  These mistakes often lead to underpricing, unstable income, and burnout. This
-                  calculator helps you avoid them by giving you a more realistic number to work from.
-                </p>
-              </div>
-
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-6">
-                  Frequently Asked Questions
-                </h2>
-
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                      How do I know if my hourly rate is too low?
-                    </h3>
-                    <p className="text-slate-700 leading-7">
-                      If your current rate does not cover taxes, expenses, savings, and profit, it is
-                      probably too low. Many freelancers only realize this after a few months of
-                      inconsistent income.
-                    </p>
+              <h2 style={S.proseH}>Frequently Asked Questions</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {[
+                  { q: 'How do I know if my hourly rate is too low?', a: "If your rate doesn't cover taxes, expenses, savings, and profit — it's probably too low. Many freelancers only realize this after months of inconsistent income." },
+                  { q: 'Should I charge hourly or by project?', a: 'Hourly pricing is useful when starting out or when scope is unclear. Project pricing often becomes better as experience grows.' },
+                  { q: 'How many billable hours should I expect per week?', a: 'Most freelancers average 20–30 billable hours, depending on admin work, sales, revisions, and client communication.' },
+                  { q: 'Does this include taxes and expenses?', a: 'Yes. Both are baked into the calculation so your suggested rate is grounded in reality.' },
+                ].map(({ q, a }) => (
+                  <div key={q}>
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--color-ink-200)', marginBottom: '0.35rem' }}>{q}</p>
+                    <p style={S.prose}>{a}</p>
                   </div>
-
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                      Should I charge hourly or by project?
-                    </h3>
-                    <p className="text-slate-700 leading-7">
-                      Hourly pricing is useful when starting out or when scope is unclear. Project
-                      pricing often becomes a better option as your experience grows and you get better
-                      at estimating outcomes.
-                    </p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                      How many billable hours should I expect per week?
-                    </h3>
-                    <p className="text-slate-700 leading-7">
-                      Many freelancers average between 20 and 30 billable hours per week, depending on
-                      admin work, sales, revisions, and client communication.
-                    </p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                      Does this calculator include taxes and expenses?
-                    </h3>
-                    <p className="text-slate-700 leading-7">
-                      Yes. It is designed to include both so your suggested rate is more realistic and
-                      more useful for real business decisions.
-                    </p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                      Can beginners use this calculator?
-                    </h3>
-                    <p className="text-slate-700 leading-7">
-                      Absolutely. In fact, beginners benefit the most because this helps prevent
-                      underpricing from the start.
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
-            </section>
+            </div>
           </div>
 
-          <div className="lg:col-span-5 lg:sticky lg:top-24">
+          {/* Right: results — sticky */}
+          <div className="lg:col-span-5" style={{ position: 'sticky', top: '5.5rem' }}>
             <ResultsDisplay results={results} />
           </div>
         </div>

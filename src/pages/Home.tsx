@@ -2,366 +2,172 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { SEO } from '../components/SEO';
-import { 
-  ArrowRight, 
-  CheckCircle2, 
-  DollarSign, 
-  Clock, 
-  ShieldCheck, 
-  Users, 
-  Zap, 
-  ChevronDown, 
-  BookOpen,
-  Calendar
-} from 'lucide-react';
 
 const faqs = [
-  {
-    question: "Is this calculator really free?",
-    answer: "Yes, 100% free. We built RateCraft to help the freelance community thrive. No hidden fees, no credit card required."
-  },
-  {
-    question: "How accurate are the calculations?",
-    answer: "The calculations are based on the financial inputs you provide. While it provides a solid baseline, we always recommend consulting with a financial advisor for complex business planning."
-  },
-  {
-    question: "Do you store my financial data?",
-    answer: "No. All calculations happen locally in your browser. We don't store or see any of the numbers you enter into the calculator."
-  },
-  {
-    question: "What is a 'Profit Margin Buffer'?",
-    answer: "It's an extra percentage added to your base rate to account for business growth, unexpected expenses, and to ensure you're not just 'breaking even' but actually building wealth."
-  }
+  { question: 'Is this calculator really free?', answer: "Yes, 100% free. No hidden fees, no credit card required." },
+  { question: 'How accurate are the calculations?', answer: "Based on your inputs, it provides a solid baseline. We recommend consulting a financial advisor for complex planning." },
+  { question: 'Do you store my financial data?', answer: "No. All calculations happen locally in your browser. We don't store or see any numbers you enter." },
+  { question: "What is a 'Profit Margin Buffer'?", answer: "An extra percentage added to your base rate for growth, unexpected expenses, and building wealth beyond break-even." },
 ];
 
 const blogPosts = [
-  {
-    id: 'how-to-calculate-freelance-rate',
-    title: 'How to Calculate Your Freelance Rate: The Math Behind Profitability',
-    date: 'March 25, 2026',
-    category: 'Strategy',
-    image: 'https://picsum.photos/seed/rate/400/250',
-  },
-  {
-    id: 'hidden-costs-of-freelancing',
-    title: 'Beyond the Laptop: 7 Hidden Costs of Running a Freelance Business',
-    date: 'March 18, 2026',
-    category: 'Finance',
-    image: 'https://picsum.photos/seed/costs/400/250',
-  }
+  { id: 'how-to-calculate-freelance-rate', title: 'How to Calculate Your Freelance Rate: The Math Behind Profitability', date: 'March 25, 2026', category: 'Strategy' },
+  { id: 'hidden-costs-of-freelancing', title: 'Beyond the Laptop: 7 Hidden Costs of Running a Freelance Business', date: 'March 18, 2026', category: 'Finance' },
 ];
+
+const S = {
+  monoLabel: { fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.16em', textTransform: 'uppercase' as const, color: 'var(--color-brass-500)', marginBottom: '1rem', display: 'block' },
+  displayH2: { fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--color-ink-50)', letterSpacing: '-0.02em', lineHeight: 1.1 },
+  bodyText: { fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--color-ink-500)', lineHeight: 1.7 },
+  gridDivider: { background: 'var(--color-ink-800)', gap: '1px', display: 'grid' },
+  tile: { background: 'var(--color-ink-900)', padding: '1.75rem' },
+};
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
-
   return (
-    <div className="bg-white">
-      <SEO>
-        <script type="application/ld+json">
-          {JSON.stringify(faqSchema)}
-        </script>
-      </SEO>
-      
-      <main>
-        {/* Hero Section */}
-        <section className="relative pt-20 pb-32 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold mb-8 border border-brand-100">
-                <Zap className="w-3 h-3 fill-current" />
-                <span>New: Version 2.0 is live</span>
+    <div>
+      <SEO />
+
+      {/* HERO */}
+      <section style={{ minHeight: '92vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', padding: '6rem 1.5rem 4rem' }}>
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(var(--color-ink-800) 1px, transparent 1px), linear-gradient(90deg, var(--color-ink-800) 1px, transparent 1px)', backgroundSize: '60px 60px', opacity: 0.35 }} />
+        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(184,134,11,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div className="max-w-7xl mx-auto" style={{ position: 'relative', zIndex: 1, width: '100%' }}>
+          <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{ ...S.monoLabel, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <span style={{ display: 'inline-block', width: '2rem', height: '1px', background: 'var(--color-brass-500)' }} />
+            Freelance Rate Calculator
+          </motion.p>
+          <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.8rem, 7vw, 6rem)', fontWeight: 900, color: 'var(--color-ink-50)', lineHeight: 1.0, letterSpacing: '-0.03em', maxWidth: '900px', marginBottom: '2rem' }}>
+            Stop guessing.<br />
+            <em style={{ color: 'var(--color-brass-400)', fontStyle: 'italic' }}>Know your rate.</em>
+          </motion.h1>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.32 }} style={{ ...S.bodyText, fontSize: '1.05rem', maxWidth: '500px', marginBottom: '3rem' }}>
+            Factor in taxes, overhead, and profit margin to set a rate that actually sustains your business — not just covers your laptop.
+          </motion.p>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.42 }} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <Link to="/calculator" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.9rem 2rem', background: 'var(--color-brass-500)', color: 'var(--color-ink-950)', textDecoration: 'none', fontWeight: 500 }}>Open Calculator →</Link>
+            <Link to="/blog" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.9rem 2rem', border: '1px solid var(--color-ink-700)', color: 'var(--color-ink-400)', textDecoration: 'none' }}>Read the Blog</Link>
+          </motion.div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 }} style={{ marginTop: '5rem', paddingTop: '2.5rem', borderTop: '1px solid var(--color-ink-800)', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+            {[{ num: '6', unit: 'inputs', label: 'Financial variables' }, { num: '100%', unit: '', label: 'Client-side only' }, { num: '∞', unit: '', label: 'Recalculates live' }].map((stat, i) => (
+              <div key={i} style={{ padding: '1.25rem 1.5rem', borderRight: i < 2 ? '1px solid var(--color-ink-800)' : 'none' }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 700, color: 'var(--color-ink-100)', lineHeight: 1, letterSpacing: '-0.02em' }}>{stat.num}{stat.unit && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--color-brass-500)', marginLeft: '0.3rem' }}>{stat.unit}</span>}</p>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.08em', color: 'var(--color-ink-600)', marginTop: '0.3rem', textTransform: 'uppercase' }}>{stat.label}</p>
               </div>
-              <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-8 tracking-tight leading-[1.1]">
-                Stop undercharging. <br />
-                <span className="text-brand-600">Know your true market value.</span>
-              </h1>
-              <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
-                The most comprehensive hourly rate calculator for freelancers, consultants, and independent professionals. 
-                Factor in taxes, overhead, and profit to build a sustainable business.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  to="/calculator"
-                  className="w-full sm:w-auto px-8 py-4 bg-brand-600 text-white rounded-full font-bold text-lg hover:bg-brand-700 transition-all shadow-xl shadow-brand-200 flex items-center justify-center gap-2"
-                >
-                  Try the Calculator
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-                <Link
-                  to="/blog"
-                  className="w-full sm:w-auto px-8 py-4 bg-slate-100 text-slate-900 rounded-full font-bold text-lg hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
-                >
-                  <BookOpen className="w-5 h-5" />
-                  Read the Blog
-                </Link>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-        
-        {/* Decorative background */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 pointer-events-none opacity-20">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-400 rounded-full blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-violet-400 rounded-full blur-[120px]" />
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* Who it's for */}
-      <section className="py-24 border-y border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* WHO IT'S FOR */}
+      <section style={{ padding: '6rem 1.5rem', background: 'var(--color-ink-900)', borderTop: '1px solid var(--color-ink-800)', borderBottom: '1px solid var(--color-ink-800)' }}>
+        <div className="max-w-7xl mx-auto" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem' }}>
+          <div>
+            <span style={S.monoLabel}>Who it's for</span>
+            <h2 style={{ ...S.displayH2, fontSize: 'clamp(2rem, 4vw, 2.75rem)', marginBottom: '1.25rem' }}>If you sell your time, this tool is for you.</h2>
+            <p style={{ ...S.bodyText, marginBottom: '2rem' }}>From solo developers to boutique agencies, RateCraft gives you a number grounded in your actual costs — not guesswork.</p>
+            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+              {['Freelance Developers & Designers', 'Marketing Consultants & Copywriters', 'Virtual Assistants & Project Managers', 'Photographers & Creative Professionals', 'Small Service Business Owners'].map((item) => (
+                <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontFamily: 'var(--font-sans)', fontSize: '0.875rem', color: 'var(--color-ink-300)' }}>
+                  <span style={{ width: '4px', height: '4px', background: 'var(--color-brass-500)', flexShrink: 0 }} />{item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div style={{ ...S.gridDivider, gridTemplateColumns: '1fr 1fr', alignSelf: 'start' }}>
+            {[{ num: '01', title: 'Privacy First', desc: 'All math happens in your browser. Zero data transmitted.' }, { num: '02', title: 'Profit Focused', desc: 'Goes beyond break-even to build actual margins.' }, { num: '03', title: 'Tax Aware', desc: "Bakes in self-employment tax so you're never blindsided." }, { num: '04', title: 'Time Realistic', desc: 'Accounts for admin, sales, and non-billable hours.' }].map((tile) => (
+              <div key={tile.num} style={S.tile}>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--color-ink-700)', marginBottom: '0.75rem' }}>{tile.num}</p>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: 'var(--color-ink-100)', marginBottom: '0.4rem' }}>{tile.title}</p>
+                <p style={{ ...S.bodyText, fontSize: '0.8rem' }}>{tile.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section style={{ padding: '6rem 1.5rem' }}>
+        <div className="max-w-7xl mx-auto">
+          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <span style={S.monoLabel}>Process</span>
+            <h2 style={{ ...S.displayH2, fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}>Three inputs. One clear number.</h2>
+          </div>
+          <div style={{ ...S.gridDivider, gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
+            {[{ step: 'I', title: 'Set Your Goals', desc: 'Enter your desired monthly income and estimated tax percentage.' }, { step: 'II', title: 'Add Your Costs', desc: 'Factor in monthly business expenses and your target profit margin.' }, { step: 'III', title: 'Define Availability', desc: 'Set your weekly billable hours and how many weeks per month you work.' }].map((step, i) => (
+              <div key={i} style={{ background: 'var(--color-ink-950)', padding: '2.5rem 2rem' }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 700, fontStyle: 'italic', color: 'var(--color-ink-800)', lineHeight: 1, marginBottom: '1.5rem' }}>{step.step}</p>
+                <div style={{ width: '1.5rem', height: '1px', background: 'var(--color-brass-500)', marginBottom: '1rem' }} />
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: 'var(--color-ink-100)', marginBottom: '0.5rem' }}>{step.title}</p>
+                <p style={{ ...S.bodyText, fontSize: '0.85rem' }}>{step.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+            <Link to="/calculator" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.9rem 2.5rem', border: '1px solid var(--color-brass-600)', color: 'var(--color-brass-400)', textDecoration: 'none', display: 'inline-block' }}>Try it free →</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section style={{ padding: '6rem 1.5rem', background: 'var(--color-ink-900)', borderTop: '1px solid var(--color-ink-800)' }}>
+        <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+          <span style={{ ...S.monoLabel, textAlign: 'center', display: 'block' }}>FAQ</span>
+          <h2 style={{ ...S.displayH2, fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', textAlign: 'center', marginBottom: '3rem' }}>Questions & Answers</h2>
+          {faqs.map((faq, i) => (
+            <div key={i} style={{ borderTop: '1px solid var(--color-ink-800)', borderBottom: i === faqs.length - 1 ? '1px solid var(--color-ink-800)' : 'none' }}>
+              <button onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{ width: '100%', padding: '1.25rem 0', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', textAlign: 'left' }}>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: 'var(--color-ink-100)', lineHeight: 1.4 }}>{faq.question}</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', color: 'var(--color-brass-500)', flexShrink: 0, transform: openFaq === i ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s' }}>+</span>
+              </button>
+              <AnimatePresence>
+                {openFaq === i && (
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }} style={{ overflow: 'hidden' }}>
+                    <p style={{ ...S.bodyText, paddingBottom: '1.25rem' }}>{faq.answer}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* BLOG PREVIEW */}
+      <section style={{ padding: '6rem 1.5rem' }}>
+        <div className="max-w-7xl mx-auto">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">Who is RateCraft for?</h2>
-              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                Whether you're just starting your freelance journey or you're a seasoned consultant, 
-                RateCraft is designed to help you build a sustainable business.
-              </p>
-              <ul className="space-y-4">
-                {[
-                  'Freelance Developers & Designers',
-                  'Marketing Consultants & Copywriters',
-                  'Virtual Assistants & Project Managers',
-                  'Photographers & Creative Professionals',
-                  'Small Service Business Owners'
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-slate-700 font-medium">
-                    <CheckCircle2 className="w-5 h-5 text-brand-600" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <span style={S.monoLabel}>From the blog</span>
+              <h2 style={{ ...S.displayH2, fontSize: '1.75rem' }}>Freelance finance, demystified.</h2>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-4 pt-8">
-                <div className="p-6 rounded-3xl bg-brand-50 border border-brand-100">
-                  <Users className="w-8 h-8 text-brand-600 mb-4" />
-                  <h4 className="font-bold text-slate-900">Community Driven</h4>
-                  <p className="text-sm text-slate-600">Built for the needs of independent workers.</p>
-                </div>
-                <div className="p-6 rounded-3xl bg-slate-50 border border-slate-100">
-                  <ShieldCheck className="w-8 h-8 text-slate-600 mb-4" />
-                  <h4 className="font-bold text-slate-900">Privacy First</h4>
-                  <p className="text-sm text-slate-600">Your financial data never leaves your device.</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="p-6 rounded-3xl bg-violet-50 border border-violet-100">
-                  <DollarSign className="w-8 h-8 text-violet-600 mb-4" />
-                  <h4 className="font-bold text-slate-900">Profit Focused</h4>
-                  <p className="text-sm text-slate-600">Move beyond just "getting by" to true growth.</p>
-                </div>
-                <div className="p-6 rounded-3xl bg-emerald-50 border border-emerald-100">
-                  <Clock className="w-8 h-8 text-emerald-600 mb-4" />
-                  <h4 className="font-bold text-slate-900">Time Valued</h4>
-                  <p className="text-sm text-slate-600">Account for every billable and non-billable hour.</p>
-                </div>
-              </div>
-            </div>
+            <Link to="/blog" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-brass-400)', textDecoration: 'none' }}>All articles →</Link>
           </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-24 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Why use RateCraft?</h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">
-              Most freelancers undercharge because they forget to account for hidden costs. 
-              We help you see the full picture.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Expense Tracking',
-                desc: 'Account for software, hardware, and office costs that eat into your profit.',
-                icon: DollarSign,
-                color: 'bg-emerald-100 text-emerald-600',
-              },
-              {
-                title: 'Lifestyle First',
-                desc: 'Factor in vacation time and sick days so you don\'t burn out to meet your goals.',
-                icon: Clock,
-                color: 'bg-brand-100 text-brand-600',
-              },
-              {
-                title: 'Tax Preparedness',
-                desc: 'Estimate your tax burden upfront so you\'re never surprised by the IRS.',
-                icon: ShieldCheck,
-                color: 'bg-violet-100 text-violet-600',
-              },
-            ].map((feature, idx) => (
-              <div key={idx} className="p-8 rounded-3xl bg-white border border-slate-200 hover:shadow-lg transition-shadow">
-                <div className={`w-12 h-12 rounded-2xl ${feature.color} flex items-center justify-center mb-6`}>
-                  <feature.icon className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">How it works</h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">
-              Three simple steps to financial clarity.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
-            <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-slate-100 -z-10" />
-            {[
-              { step: '01', title: 'Enter Your Goals', desc: 'Input your desired monthly income and estimated taxes.' },
-              { step: '02', title: 'Add Expenses', desc: 'Factor in your monthly business costs and profit margin.' },
-              { step: '03', title: 'Set Availability', desc: 'Define your billable hours and working weeks per month.' }
-            ].map((item, i) => (
-              <div key={i} className="text-center bg-white px-4">
-                <div className="w-12 h-12 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold mx-auto mb-6 shadow-lg shadow-brand-200">
-                  {item.step}
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">{item.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-24 bg-slate-50">
-        <div className="max-w-3xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Frequently Asked Questions</h2>
-            <p className="text-slate-600">Everything you need to know about RateCraft.</p>
-          </div>
-          <div className="space-y-4">
-            {faqs.map((faq, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                <button 
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full p-6 text-left flex items-center justify-between font-bold text-slate-900 hover:bg-slate-50 transition-colors"
-                >
-                  {faq.question}
-                  <ChevronDown className={`w-5 h-5 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {openFaq === i && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="p-6 pt-0 text-slate-600 leading-relaxed border-t border-slate-50">
-                        {faq.answer}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Blog Links Section */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-            <div>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">From the Blog</h2>
-              <p className="text-slate-600">Insights to help you grow your freelance business.</p>
-            </div>
-            <Link to="/blog" className="text-brand-600 font-bold flex items-center gap-2 hover:gap-3 transition-all">
-              View all articles
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div style={{ ...S.gridDivider, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
             {blogPosts.map((post) => (
-              <Link 
-                key={post.id} 
-                to={`/blog/${post.id}`}
-                className="group flex flex-col sm:flex-row gap-6 bg-white p-4 rounded-3xl border border-slate-100 hover:border-brand-200 hover:shadow-xl transition-all"
-              >
-                <div className="w-full sm:w-48 h-32 rounded-2xl overflow-hidden flex-shrink-0">
-                  <img 
-                    src={post.image} 
-                    alt={post.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <div className="flex items-center gap-3 text-xs font-medium text-slate-400 mb-2">
-                    <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md">{post.category}</span>
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      {post.date}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors leading-tight">
-                    {post.title}
-                  </h3>
-                </div>
+              <Link key={post.id} to={`/blog/${post.id}`} style={{ background: 'var(--color-ink-900)', padding: '2rem', textDecoration: 'none', display: 'block', transition: 'background 0.2s' }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--color-ink-800)')}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--color-ink-900)')}>
+                <span style={{ display: 'inline-block', fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-brass-500)', border: '1px solid rgba(184,134,11,0.3)', padding: '0.2rem 0.5rem', marginBottom: '1.25rem' }}>{post.category}</span>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-ink-100)', lineHeight: 1.35, letterSpacing: '-0.01em', marginBottom: '1.25rem' }}>{post.title}</h3>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.06em', color: 'var(--color-ink-600)' }}>{post.date}</p>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="bg-slate-900 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden">
-            <div className="relative z-10">
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-                Ready to find your <br /> perfect rate?
-              </h2>
-              <p className="text-slate-400 mb-10 text-lg max-w-xl mx-auto">
-                Join thousands of freelancers who use RateCraft to build sustainable, 
-                profitable businesses.
-              </p>
-              <Link
-                to="/calculator"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg hover:bg-slate-100 transition-all"
-              >
-                Get Started Now
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none">
-              <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
-            </div>
-          </div>
+      {/* CTA */}
+      <section style={{ padding: '6rem 1.5rem', borderTop: '1px solid var(--color-ink-800)' }}>
+        <div className="max-w-4xl mx-auto" style={{ textAlign: 'center' }}>
+          <span style={S.monoLabel}>Get started</span>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 5vw, 4rem)', fontWeight: 900, color: 'var(--color-ink-50)', letterSpacing: '-0.03em', lineHeight: 1.05, marginBottom: '2.5rem' }}>
+            Your rate, calculated<br />
+            <em style={{ color: 'var(--color-brass-400)', fontStyle: 'italic' }}>in under a minute.</em>
+          </h2>
+          <Link to="/calculator" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '1rem 2.5rem', background: 'var(--color-brass-500)', color: 'var(--color-ink-950)', textDecoration: 'none', display: 'inline-block', fontWeight: 500 }}>Open the Calculator →</Link>
         </div>
       </section>
-      </main>
     </div>
   );
 }

@@ -1,96 +1,264 @@
 import React from 'react';
 import { CalculationResults } from '../types';
 import { motion } from 'motion/react';
-import { TrendingUp, Clock, Calendar, Wallet } from 'lucide-react';
 
 interface ResultsDisplayProps {
   results: CalculationResults;
 }
 
 export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
-  const formatCurrency = (val: number) => 
-    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
+  const fmt = (val: number) =>
+    new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0,
+    }).format(val);
 
-  const cards = [
+  const primaryCards = [
     {
-      label: 'Recommended Hourly Rate',
-      value: formatCurrency(results.recommendedHourlyRate),
-      icon: Clock,
-      color: 'text-brand-600',
-      bg: 'bg-brand-50',
+      label: 'Hourly Rate',
+      value: fmt(results.recommendedHourlyRate),
+      tag: 'RECOMMENDED',
+      accent: true,
     },
     {
-      label: 'Recommended Day Rate',
-      value: formatCurrency(results.recommendedDayRate),
-      icon: Calendar,
-      color: 'text-emerald-600',
-      bg: 'bg-emerald-50',
-    },
-    {
-      label: 'Monthly Revenue Target',
-      value: formatCurrency(results.monthlyRevenueTarget),
-      icon: TrendingUp,
-      color: 'text-violet-600',
-      bg: 'bg-violet-50',
-    },
-    {
-      label: 'Yearly Revenue Target',
-      value: formatCurrency(results.yearlyRevenueTarget),
-      icon: Wallet,
-      color: 'text-amber-600',
-      bg: 'bg-amber-50',
+      label: 'Day Rate',
+      value: fmt(results.recommendedDayRate),
+      tag: 'PER DAY',
+      accent: false,
     },
   ];
 
+  const secondaryCards = [
+    {
+      label: 'Monthly Target',
+      value: fmt(results.monthlyRevenueTarget),
+    },
+    {
+      label: 'Yearly Target',
+      value: fmt(results.yearlyRevenueTarget),
+    },
+  ];
+
+  const breakdownRows = [
+    { label: 'Billable hours / mo', value: `${Math.round(results.totalMonthlyBillableHours)} hrs` },
+    { label: 'Business expenses', value: fmt(results.monthlyExpensesAmount) },
+    { label: 'Estimated taxes', value: fmt(results.monthlyTaxAmount) },
+    { label: 'Profit buffer', value: fmt(results.monthlyProfitAmount) },
+  ];
+
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {cards.map((card, idx) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+      {/* Primary rate cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', background: 'var(--color-ink-800)' }}>
+        {primaryCards.map((card, idx) => (
           <motion.div
             key={card.label}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
+            transition={{ delay: idx * 0.08, duration: 0.35, ease: 'easeOut' }}
+            style={{
+              background: card.accent ? 'var(--color-ink-900)' : 'var(--color-ink-950)',
+              padding: '1.5rem',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
           >
-            <div className="flex items-center gap-3 mb-2">
-              <div className={`p-2 rounded-lg ${card.bg}`}>
-                <card.icon className={`w-5 h-5 ${card.color}`} />
-              </div>
-              <span className="text-sm font-medium text-slate-500">{card.label}</span>
-            </div>
-            <div className="text-2xl font-bold text-slate-900">{card.value}</div>
+            {card.accent && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '2px',
+                  background: 'linear-gradient(90deg, var(--color-brass-600), var(--color-brass-300))',
+                }}
+              />
+            )}
+            <p
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.6rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: card.accent ? 'var(--color-brass-500)' : 'var(--color-ink-600)',
+                marginBottom: '0.5rem',
+              }}
+            >
+              {card.tag}
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '1.75rem',
+                fontWeight: 700,
+                color: card.accent ? 'var(--color-ink-50)' : 'var(--color-ink-300)',
+                lineHeight: 1,
+                letterSpacing: '-0.02em',
+              }}
+            >
+              {card.value}
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
+                color: 'var(--color-ink-600)',
+                marginTop: '0.4rem',
+              }}
+            >
+              {card.label}
+            </p>
           </motion.div>
         ))}
       </div>
 
-      <div className="p-6 rounded-2xl bg-slate-900 text-white">
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          Monthly Breakdown
-        </h3>
-        <div className="space-y-3">
-          <div className="flex justify-between text-sm">
-            <span className="text-slate-400">Billable Hours</span>
-            <span className="font-mono">{Math.round(results.totalMonthlyBillableHours)} hrs</span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-slate-400">Business Expenses</span>
-            <span className="font-mono">{formatCurrency(results.monthlyExpensesAmount)}</span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-slate-400">Estimated Taxes</span>
-            <span className="font-mono">{formatCurrency(results.monthlyTaxAmount)}</span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-slate-400">Profit Buffer</span>
-            <span className="font-mono">{formatCurrency(results.monthlyProfitAmount)}</span>
-          </div>
-          <div className="pt-3 border-t border-slate-800 flex justify-between font-bold">
-            <span>Monthly Revenue Target</span>
-            <span className="text-brand-400">{formatCurrency(results.monthlyRevenueTarget)}</span>
-          </div>
-        </div>
+      {/* Secondary cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', background: 'var(--color-ink-800)' }}>
+        {secondaryCards.map((card, idx) => (
+          <motion.div
+            key={card.label}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.16 + idx * 0.08, duration: 0.35, ease: 'easeOut' }}
+            style={{
+              background: 'var(--color-ink-900)',
+              padding: '1.1rem 1.25rem',
+            }}
+          >
+            <p
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
+                color: 'var(--color-ink-600)',
+                marginBottom: '0.3rem',
+                letterSpacing: '0.06em',
+              }}
+            >
+              {card.label}
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '1.1rem',
+                color: 'var(--color-ink-200)',
+                fontWeight: 500,
+              }}
+            >
+              {card.value}
+            </p>
+          </motion.div>
+        ))}
       </div>
+
+      {/* Monthly breakdown */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.35, duration: 0.4 }}
+        style={{
+          background: 'var(--color-ink-900)',
+          border: '1px solid var(--color-ink-800)',
+          padding: '1.5rem',
+        }}
+      >
+        <p
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.65rem',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: 'var(--color-ink-600)',
+            marginBottom: '1.25rem',
+            paddingBottom: '0.75rem',
+            borderBottom: '1px solid var(--color-ink-800)',
+          }}
+        >
+          Monthly Breakdown
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {breakdownRows.map((row) => (
+            <div
+              key={row.label}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'baseline',
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.8rem',
+                  color: 'var(--color-ink-500)',
+                }}
+              >
+                {row.label}
+              </span>
+              <span
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.82rem',
+                  color: 'var(--color-ink-300)',
+                }}
+              >
+                {row.value}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Total */}
+        <div
+          style={{
+            marginTop: '1rem',
+            paddingTop: '1rem',
+            borderTop: '1px solid var(--color-ink-800)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.7rem',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color: 'var(--color-ink-400)',
+            }}
+          >
+            Revenue Target
+          </span>
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '1.2rem',
+              fontWeight: 700,
+              color: 'var(--color-brass-400)',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            {fmt(results.monthlyRevenueTarget)}
+          </span>
+        </div>
+      </motion.div>
+
+      {/* Disclaimer */}
+      <p
+        style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.62rem',
+          color: 'var(--color-ink-700)',
+          lineHeight: 1.6,
+          letterSpacing: '0.03em',
+        }}
+      >
+        Estimates only. Consult a financial advisor for business planning.
+      </p>
     </div>
   );
 };

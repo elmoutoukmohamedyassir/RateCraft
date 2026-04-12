@@ -1,31 +1,139 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Outfit", sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-mono: "DM Mono", "Courier New", monospace;
 
-  --color-brand-50: #f0f9ff;
-  --color-brand-100: #e0f2fe;
-  --color-brand-200: #bae6fd;
-  --color-brand-300: #7dd3fc;
-  --color-brand-400: #38bdf8;
-  --color-brand-500: #0ea5e9;
-  --color-brand-600: #0284c7;
-  --color-brand-700: #0369a1;
-  --color-brand-800: #075985;
-  --color-brand-900: #0c4a6e;
+  /* Ink & Brass palette */
+  --color-ink-950: #0e0d0b;
+  --color-ink-900: #1a1814;
+  --color-ink-800: #2a2720;
+  --color-ink-700: #3d3930;
+  --color-ink-600: #55503f;
+  --color-ink-500: #7a7460;
+  --color-ink-400: #a09880;
+  --color-ink-300: #c4bca8;
+  --color-ink-200: #ddd8cc;
+  --color-ink-100: #f0ece4;
+  --color-ink-50:  #f8f5ef;
+
+  --color-brass-600: #b8860b;
+  --color-brass-500: #d4a017;
+  --color-brass-400: #e8b830;
+  --color-brass-300: #f0cc6a;
+  --color-brass-200: #f7e3a8;
+  --color-brass-100: #fdf3d8;
+
+  --color-verdigris: #2a7a6b;
+  --color-verdigris-light: #3da090;
+  --color-verdigris-pale: #d0eeea;
+
+  --color-brand-50:  #fdf3d8;
+  --color-brand-100: #f7e3a8;
+  --color-brand-200: #f0cc6a;
+  --color-brand-300: #e8b830;
+  --color-brand-400: #d4a017;
+  --color-brand-500: #b8860b;
+  --color-brand-600: #9a6e08;
+  --color-brand-700: #7a5506;
+  --color-brand-800: #5a3e04;
+  --color-brand-900: #3a2802;
 }
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+    background-color: var(--color-ink-950);
+    color: var(--color-ink-100);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    font-family: var(--font-display);
   }
 }
 
-.glass-card {
-  @apply bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm;
+/* Grain texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* Horizontal rule with ornament */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color-ink-600);
+}
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-ink-700), transparent);
+}
+
+/* Brass accent line */
+.brass-line {
+  width: 3rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-brass-500), var(--color-brass-300));
+}
+
+/* Monospaced label */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brass-400);
+}
+
+/* Input overrides for dark theme */
+input[type="number"],
+input[type="text"],
+input[type="email"],
+textarea {
+  background: var(--color-ink-900);
+  border-color: var(--color-ink-700);
+  color: var(--color-ink-100);
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: var(--color-brass-500);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.15);
+}
+
+input[type="range"] {
+  accent-color: var(--color-brass-500);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-ink-950); }
+::-webkit-scrollbar-thumb { background: var(--color-ink-700); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-brass-500); }
+
+/* Page transition fade */
+.page-enter {
+  animation: pageFade 0.4s ease forwards;
+}
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

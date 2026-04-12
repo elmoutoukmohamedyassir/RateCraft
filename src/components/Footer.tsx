@@ -1,63 +1,193 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calculator, Mail, Twitter, Github, Linkedin } from 'lucide-react';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-900 text-slate-300 pt-20 pb-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+    <footer
+      style={{
+        background: 'var(--color-ink-900)',
+        borderTop: '1px solid var(--color-ink-800)',
+        paddingTop: '4rem',
+        paddingBottom: '2.5rem',
+      }}
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Top row */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr',
+            gap: '3rem',
+            marginBottom: '3rem',
+          }}
+          className="md:grid-cols-4"
+        >
           {/* Brand */}
-          <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center gap-2 text-white mb-6">
-              <div className="p-1.5 bg-brand-600 rounded-lg">
-                <Calculator className="w-6 h-6" />
-              </div>
-              <span className="text-xl font-bold tracking-tight">RateCraft</span>
+          <div style={{ gridColumn: 'span 2' }}>
+            <Link
+              to="/"
+              style={{ textDecoration: 'none', display: 'inline-block', marginBottom: '1.25rem' }}
+            >
+              <span
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '1.5rem',
+                  fontWeight: 700,
+                  color: 'var(--color-ink-50)',
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                RateCraft
+              </span>
             </Link>
-            <p className="text-slate-400 max-w-sm mb-8 leading-relaxed">
-              Empowering freelancers and independent professionals with the tools 
-              they need to build sustainable, profitable businesses.
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.875rem',
+                color: 'var(--color-ink-500)',
+                lineHeight: 1.7,
+                maxWidth: '320px',
+                marginBottom: '1.5rem',
+              }}
+            >
+              Financial clarity for independent professionals. Know what you're worth.
+              Charge accordingly.
             </p>
-            <div className="flex gap-4">
-              <a href="mailto:impact.me02@gmail.com" className="p-2 rounded-full bg-slate-800 hover:bg-brand-600 hover:text-white transition-all">
-                <Mail className="w-4 h-4" />
-              </a>
-            </div>
+            <a
+              href="mailto:impact.me02@gmail.com"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.7rem',
+                letterSpacing: '0.08em',
+                color: 'var(--color-brass-400)',
+                textDecoration: 'none',
+              }}
+            >
+              impact.me02@gmail.com
+            </a>
           </div>
 
-          {/* Links */}
+          {/* Product links */}
           <div>
-            <h3 className="text-white font-bold mb-6">Product</h3>
-            <ul className="space-y-4">
-              <li><Link to="/calculator" className="hover:text-brand-400 transition-colors">Calculator</Link></li>
-              <li><Link to="/blog" className="hover:text-brand-400 transition-colors">Blog</Link></li>
-              <li><Link to="/about" className="hover:text-brand-400 transition-colors">About Us</Link></li>
-              <li><Link to="/contact" className="hover:text-brand-400 transition-colors">Contact</Link></li>
-            </ul>
+            <p
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: 'var(--color-ink-600)',
+                marginBottom: '1.25rem',
+              }}
+            >
+              Product
+            </p>
+            {[
+              { name: 'Calculator', path: '/calculator' },
+              { name: 'Blog', path: '/blog' },
+              { name: 'About', path: '/about' },
+              { name: 'Contact', path: '/contact' },
+            ].map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                style={{
+                  display: 'block',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.875rem',
+                  color: 'var(--color-ink-400)',
+                  textDecoration: 'none',
+                  marginBottom: '0.75rem',
+                  transition: 'color 0.15s',
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = 'var(--color-brass-300)')
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = 'var(--color-ink-400)')
+                }
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
 
-          {/* Legal */}
+          {/* Legal links */}
           <div>
-            <h3 className="text-white font-bold mb-6">Legal</h3>
-            <ul className="space-y-4">
-              <li><Link to="/privacy" className="hover:text-brand-400 transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="hover:text-brand-400 transition-colors">Terms of Service</Link></li>
-              <li><Link to="/disclaimer" className="hover:text-brand-400 transition-colors">Disclaimer</Link></li>
-            </ul>
+            <p
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: 'var(--color-ink-600)',
+                marginBottom: '1.25rem',
+              }}
+            >
+              Legal
+            </p>
+            {[
+              { name: 'Privacy', path: '/privacy' },
+              { name: 'Terms', path: '/terms' },
+              { name: 'Disclaimer', path: '/disclaimer' },
+            ].map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                style={{
+                  display: 'block',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.875rem',
+                  color: 'var(--color-ink-400)',
+                  textDecoration: 'none',
+                  marginBottom: '0.75rem',
+                  transition: 'color 0.15s',
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = 'var(--color-brass-300)')
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = 'var(--color-ink-400)')
+                }
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
         </div>
 
-        <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6">
-          <p className="text-sm text-slate-500">
-            © {currentYear} RateCraft. Built for the freelance community.
+        {/* Bottom bar */}
+        <div
+          style={{
+            borderTop: '1px solid var(--color-ink-800)',
+            paddingTop: '1.5rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '0.75rem',
+          }}
+          className="sm:flex-row"
+        >
+          <p
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.68rem',
+              letterSpacing: '0.06em',
+              color: 'var(--color-ink-700)',
+            }}
+          >
+            © {currentYear} RateCraft — Built for the freelance community
           </p>
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <Mail className="w-4 h-4" />
-            impact.me02@gmail.com
-          </div>
+          <div
+            style={{
+              width: '2rem',
+              height: '1px',
+              background:
+                'linear-gradient(90deg, var(--color-brass-600), var(--color-brass-300))',
+            }}
+          />
         </div>
       </div>
     </footer>

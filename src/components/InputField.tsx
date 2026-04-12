@@ -1,6 +1,5 @@
 import React from 'react';
 import { CalculatorState } from '../types';
-import { Info } from 'lucide-react';
 
 interface InputFieldProps {
   label: string;
@@ -29,52 +28,184 @@ export const InputField: React.FC<InputFieldProps> = ({
   suffix,
   tooltip,
 }) => {
+  const [showTooltip, setShowTooltip] = React.useState(false);
+
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-slate-700 flex items-center gap-1.5">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      {/* Label row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <label
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.68rem',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--color-ink-500)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+          }}
+        >
           {label}
           {tooltip && (
-            <div className="group relative">
-              <Info className="w-3.5 h-3.5 text-slate-400 cursor-help" />
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-800 text-white text-[10px] rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                {tooltip}
-              </div>
-            </div>
+            <span
+              style={{ position: 'relative', display: 'inline-flex' }}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            >
+              <span
+                style={{
+                  width: '14px',
+                  height: '14px',
+                  border: '1px solid var(--color-ink-700)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '9px',
+                  color: 'var(--color-ink-600)',
+                  cursor: 'help',
+                  flexShrink: 0,
+                }}
+              >
+                ?
+              </span>
+              {showTooltip && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 'calc(100% + 8px)',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '200px',
+                    padding: '0.6rem 0.75rem',
+                    background: 'var(--color-ink-800)',
+                    border: '1px solid var(--color-ink-700)',
+                    color: 'var(--color-ink-300)',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '0.75rem',
+                    lineHeight: 1.5,
+                    zIndex: 100,
+                    pointerEvents: 'none',
+                    textTransform: 'none',
+                    letterSpacing: 'normal',
+                  }}
+                >
+                  {tooltip}
+                </div>
+              )}
+            </span>
           )}
         </label>
+
+        {/* Range readout */}
         {type === 'range' && (
-          <span className="text-xs font-mono text-brand-600 bg-brand-50 px-2 py-0.5 rounded">
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.8rem',
+              color: 'var(--color-brass-400)',
+              background: 'rgba(184, 134, 11, 0.1)',
+              border: '1px solid rgba(184, 134, 11, 0.2)',
+              padding: '0.15rem 0.5rem',
+            }}
+          >
             {prefix}{value}{suffix}
           </span>
         )}
       </div>
-      
-      <div className="relative">
-        {prefix && type !== 'range' && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-            {prefix}
-          </div>
-        )}
-        <input
-          type={type}
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={(e) => onChange(name, parseFloat(e.target.value) || 0)}
-          className={
-            type === 'range'
-              ? "w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500"
-              : `w-full bg-white border border-slate-200 rounded-lg py-2.5 ${prefix ? 'pl-7' : 'px-3'} ${suffix ? 'pr-8' : 'px-3'} text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all`
-          }
-        />
-        {suffix && type !== 'range' && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-            {suffix}
-          </div>
-        )}
-      </div>
+
+      {/* Input */}
+      {type === 'range' ? (
+        <div style={{ paddingTop: '0.25rem' }}>
+          <input
+            type="range"
+            min={min}
+            max={max}
+            step={step}
+            value={value}
+            onChange={(e) => onChange(name, parseFloat(e.target.value) || 0)}
+            style={{
+              width: '100%',
+              height: '3px',
+              appearance: 'none',
+              background: `linear-gradient(90deg, var(--color-brass-500) ${
+                max ? (value / max) * 100 : 0
+              }%, var(--color-ink-800) ${max ? (value / max) * 100 : 0}%)`,
+              borderRadius: 0,
+              cursor: 'pointer',
+              outline: 'none',
+            }}
+          />
+        </div>
+      ) : (
+        <div style={{ position: 'relative' }}>
+          {prefix && (
+            <span
+              style={{
+                position: 'absolute',
+                left: '0.75rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.8rem',
+                color: 'var(--color-ink-600)',
+                pointerEvents: 'none',
+                userSelect: 'none',
+              }}
+            >
+              {prefix}
+            </span>
+          )}
+          <input
+            type="number"
+            min={min}
+            max={max}
+            step={step}
+            value={value}
+            onChange={(e) => onChange(name, parseFloat(e.target.value) || 0)}
+            style={{
+              width: '100%',
+              background: 'var(--color-ink-900)',
+              border: '1px solid var(--color-ink-700)',
+              color: 'var(--color-ink-100)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.9rem',
+              padding: `0.65rem ${suffix ? '2.5rem' : '0.75rem'} 0.65rem ${prefix ? '1.75rem' : '0.75rem'}`,
+              outline: 'none',
+              transition: 'border-color 0.2s, box-shadow 0.2s',
+              borderRadius: 0,
+              MozAppearance: 'textfield',
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-brass-500)';
+              e.currentTarget.style.boxShadow = '0 0 0 2px rgba(184,134,11,0.15)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-ink-700)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          />
+          {suffix && (
+            <span
+              style={{
+                position: 'absolute',
+                right: '0.75rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.75rem',
+                color: 'var(--color-ink-600)',
+                pointerEvents: 'none',
+                userSelect: 'none',
+              }}
+            >
+              {suffix}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 };

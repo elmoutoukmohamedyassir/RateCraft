@@ -1,20 +1,24 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Calculator, Github, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Footer } from './Footer';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-  // Close menu on route change
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const navLinks = [
-    { name: 'Home', path: '/' },
     { name: 'Calculator', path: '/calculator' },
     { name: 'Blog', path: '/blog' },
     { name: 'About', path: '/about' },
@@ -22,15 +26,58 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--color-ink-950)' }}>
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-brand-200">
-              <Calculator className="w-5 h-5" />
+      <nav
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 50,
+          borderBottom: scrolled
+            ? '1px solid var(--color-ink-800)'
+            : '1px solid transparent',
+          background: scrolled
+            ? 'rgba(14, 13, 11, 0.92)'
+            : 'transparent',
+          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          transition: 'all 0.3s ease',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3" style={{ textDecoration: 'none' }}>
+            <div
+              style={{
+                width: '28px',
+                height: '28px',
+                border: '1px solid var(--color-brass-500)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '10px',
+                  color: 'var(--color-brass-400)',
+                  letterSpacing: '0.02em',
+                }}
+              >
+                RC
+              </span>
             </div>
-            <span className="text-xl font-bold tracking-tight text-slate-900">RateCraft</span>
+            <span
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '1.1rem',
+                fontWeight: 700,
+                color: 'var(--color-ink-50)',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              RateCraft
+            </span>
           </Link>
 
           {/* Desktop Nav */}
@@ -39,40 +86,130 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors ${
-                  location.pathname === link.path ? 'text-brand-600' : 'text-slate-600 hover:text-brand-600'
-                }`}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color:
+                    location.pathname === link.path
+                      ? 'var(--color-brass-400)'
+                      : 'var(--color-ink-400)',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s',
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = 'var(--color-brass-300)')
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color =
+                    location.pathname === link.path
+                      ? 'var(--color-brass-400)'
+                      : 'var(--color-ink-400)')
+                }
               >
                 {link.name}
               </Link>
             ))}
-            <a
-              href="https://github.com/elmoutoukmohamedyassir"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 text-slate-400 hover:text-slate-900 transition-colors"
+            <Link
+              to="/calculator"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.7rem',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                padding: '0.45rem 1.1rem',
+                border: '1px solid var(--color-brass-500)',
+                color: 'var(--color-brass-400)',
+                background: 'transparent',
+                textDecoration: 'none',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'var(--color-brass-500)';
+                e.currentTarget.style.color = 'var(--color-ink-950)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = 'var(--color-brass-400)';
+              }}
             >
-              <Github className="w-5 h-5" />
-            </a>
+              Calculate Rate →
+            </Link>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile toggle */}
           <button
-            className="md:hidden p-2 text-slate-600"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden"
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--color-ink-300)',
+              cursor: 'pointer',
+              padding: '0.5rem',
+            }}
+            aria-label="Toggle menu"
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <div style={{ width: 22, display: 'flex', flexDirection: 'column', gap: 5 }}>
+              <span
+                style={{
+                  display: 'block',
+                  height: '1px',
+                  background: 'currentColor',
+                  transform: isMenuOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none',
+                  transition: 'transform 0.2s',
+                }}
+              />
+              <span
+                style={{
+                  display: 'block',
+                  height: '1px',
+                  background: 'currentColor',
+                  opacity: isMenuOpen ? 0 : 1,
+                  transition: 'opacity 0.2s',
+                }}
+              />
+              <span
+                style={{
+                  display: 'block',
+                  height: '1px',
+                  background: 'currentColor',
+                  transform: isMenuOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none',
+                  transition: 'transform 0.2s',
+                }}
+              />
+            </div>
           </button>
         </div>
 
         {/* Mobile Nav */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-b border-slate-200 py-4 px-4 space-y-4">
+          <div
+            style={{
+              background: 'var(--color-ink-900)',
+              borderTop: '1px solid var(--color-ink-800)',
+              padding: '1.5rem 1.5rem',
+            }}
+          >
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className="block text-base font-medium text-slate-600 hover:text-brand-600"
+                style={{
+                  display: 'block',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color:
+                    location.pathname === link.path
+                      ? 'var(--color-brass-400)'
+                      : 'var(--color-ink-300)',
+                  textDecoration: 'none',
+                  padding: '0.75rem 0',
+                  borderBottom: '1px solid var(--color-ink-800)',
+                }}
               >
                 {link.name}
               </Link>
@@ -81,9 +218,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         )}
       </nav>
 
-      <main className="flex-grow">
-        {children}
-      </main>
+      <main className="flex-grow page-enter">{children}</main>
 
       <Footer />
     </div>
