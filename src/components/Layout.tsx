@@ -1,67 +1,88 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import { Footer } from './Footer';
 
+/* ── Nav data ──────────────────────────────────────────────────── */
+const navLinks = [
+  { label: 'Calculator', path: '/calculator' },
+  { label: 'Blog',       path: '/blog'       },
+  { label: 'About',      path: '/about'      },
+  { label: 'Contact',    path: '/contact'    },
+];
+
+/* ── Layout ────────────────────────────────────────────────────── */
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
+  // Close mobile menu on route change
   useEffect(() => {
-    setIsMenuOpen(false);
+    setMenuOpen(false);
   }, [location]);
 
+  // Detect scroll for nav background
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: 'Calculator', path: '/calculator' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
-  ];
+  const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--color-ink-950)' }}>
-      {/* Navigation */}
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+
+      {/* ── Navigation ─────────────────────────────────────── */}
       <nav
         style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-          borderBottom: scrolled
-            ? '1px solid var(--color-ink-800)'
-            : '1px solid transparent',
-          background: scrolled
-            ? 'rgba(14, 13, 11, 0.92)'
-            : 'transparent',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          transition: 'all 0.3s ease',
+          position:       'sticky',
+          top:            0,
+          zIndex:         50,
+          background:     scrolled ? 'rgba(17, 16, 9, 0.95)' : 'transparent',
+          borderBottom:   scrolled ? '1px solid var(--color-ink-800)' : '1px solid transparent',
+          backdropFilter: scrolled ? 'blur(16px)' : 'none',
+          transition:     'all 0.3s ease',
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div
+          style={{
+            maxWidth:       '1280px',
+            margin:         '0 auto',
+            padding:        '0 1.5rem',
+            height:         '64px',
+            display:        'flex',
+            alignItems:     'center',
+            justifyContent: 'space-between',
+          }}
+        >
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3" style={{ textDecoration: 'none' }}>
+          <Link
+            to="/"
+            style={{
+              textDecoration: 'none',
+              display:        'flex',
+              alignItems:     'center',
+              gap:            '10px',
+              flexShrink:     0,
+            }}
+          >
             <div
               style={{
-                width: '28px',
-                height: '28px',
-                border: '1px solid var(--color-brass-500)',
-                display: 'flex',
-                alignItems: 'center',
+                width:          '30px',
+                height:         '30px',
+                border:         '1px solid var(--color-brass-500)',
+                display:        'flex',
+                alignItems:     'center',
                 justifyContent: 'center',
               }}
             >
               <span
                 style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '10px',
-                  color: 'var(--color-brass-400)',
-                  letterSpacing: '0.02em',
+                  fontFamily:    'var(--font-mono)',
+                  fontSize:      '9px',
+                  color:         'var(--color-brass-400)',
+                  letterSpacing: '0.05em',
                 }}
               >
                 RC
@@ -69,127 +90,77 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </div>
             <span
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '1.1rem',
-                fontWeight: 700,
-                color: 'var(--color-ink-50)',
-                letterSpacing: '-0.01em',
+                fontFamily:    'var(--font-display)',
+                fontSize:      '1.15rem',
+                fontWeight:    700,
+                color:         'var(--color-ink-50)',
+                letterSpacing: '-0.02em',
               }}
             >
               RateCraft
             </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Desktop nav links */}
+          <div
+            className="hidden md:flex"
+            style={{ alignItems: 'center', gap: '2.5rem' }}
+          >
             {navLinks.map((link) => (
-              <Link
+              <NavLink
                 key={link.path}
-                to={link.path}
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.72rem',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color:
-                    location.pathname === link.path
-                      ? 'var(--color-brass-400)'
-                      : 'var(--color-ink-400)',
-                  textDecoration: 'none',
-                  transition: 'color 0.2s',
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = 'var(--color-brass-300)')
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color =
-                    location.pathname === link.path
-                      ? 'var(--color-brass-400)'
-                      : 'var(--color-ink-400)')
-                }
-              >
-                {link.name}
-              </Link>
+                label={link.label}
+                path={link.path}
+                active={isActive(link.path)}
+              />
             ))}
-            <Link
-              to="/calculator"
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.7rem',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                padding: '0.45rem 1.1rem',
-                border: '1px solid var(--color-brass-500)',
-                color: 'var(--color-brass-400)',
-                background: 'transparent',
-                textDecoration: 'none',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--color-brass-500)';
-                e.currentTarget.style.color = 'var(--color-ink-950)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = 'var(--color-brass-400)';
-              }}
-            >
-              Calculate Rate →
-            </Link>
+
+            {/* CTA button */}
+            <NavCTA />
           </div>
 
-          {/* Mobile toggle */}
+          {/* Mobile hamburger */}
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle navigation menu"
             className="md:hidden"
             style={{
               background: 'none',
-              border: 'none',
-              color: 'var(--color-ink-300)',
-              cursor: 'pointer',
-              padding: '0.5rem',
+              border:     'none',
+              cursor:     'pointer',
+              padding:    '0.5rem',
+              display:    'flex',
+              flexDirection: 'column',
+              gap:        '5px',
             }}
-            aria-label="Toggle menu"
           >
-            <div style={{ width: 22, display: 'flex', flexDirection: 'column', gap: 5 }}>
+            {[0, 1, 2].map((i) => (
               <span
+                key={i}
                 style={{
-                  display: 'block',
-                  height: '1px',
-                  background: 'currentColor',
-                  transform: isMenuOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none',
-                  transition: 'transform 0.2s',
+                  display:    'block',
+                  width:      '22px',
+                  height:     '1px',
+                  background: 'var(--color-ink-300)',
+                  transition: 'all 0.22s ease',
+                  transform:
+                    menuOpen && i === 0 ? 'rotate(45deg) translate(4px, 4px)'   :
+                    menuOpen && i === 2 ? 'rotate(-45deg) translate(4px, -4px)' :
+                    'none',
+                  opacity: menuOpen && i === 1 ? 0 : 1,
                 }}
               />
-              <span
-                style={{
-                  display: 'block',
-                  height: '1px',
-                  background: 'currentColor',
-                  opacity: isMenuOpen ? 0 : 1,
-                  transition: 'opacity 0.2s',
-                }}
-              />
-              <span
-                style={{
-                  display: 'block',
-                  height: '1px',
-                  background: 'currentColor',
-                  transform: isMenuOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none',
-                  transition: 'transform 0.2s',
-                }}
-              />
-            </div>
+            ))}
           </button>
         </div>
 
-        {/* Mobile Nav */}
-        {isMenuOpen && (
+        {/* Mobile menu drawer */}
+        {menuOpen && (
           <div
             style={{
-              background: 'var(--color-ink-900)',
-              borderTop: '1px solid var(--color-ink-800)',
-              padding: '1.5rem 1.5rem',
+              background:  'var(--color-ink-900)',
+              borderTop:   '1px solid var(--color-ink-800)',
+              padding:     '1.5rem',
             }}
           >
             {navLinks.map((link) => (
@@ -197,30 +168,92 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 key={link.path}
                 to={link.path}
                 style={{
-                  display: 'block',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.75rem',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color:
-                    location.pathname === link.path
-                      ? 'var(--color-brass-400)'
-                      : 'var(--color-ink-300)',
+                  display:        'block',
+                  padding:        '0.9rem 0',
+                  fontFamily:     'var(--font-mono)',
+                  fontSize:       '0.72rem',
+                  letterSpacing:  '0.12em',
+                  textTransform:  'uppercase',
+                  color:          isActive(link.path) ? 'var(--color-brass-300)' : 'var(--color-ink-300)',
                   textDecoration: 'none',
-                  padding: '0.75rem 0',
-                  borderBottom: '1px solid var(--color-ink-800)',
+                  borderBottom:   '1px solid var(--color-ink-800)',
                 }}
               >
-                {link.name}
+                {link.label}
               </Link>
             ))}
           </div>
         )}
       </nav>
 
-      <main className="flex-grow page-enter">{children}</main>
+      {/* ── Page content ───────────────────────────────────── */}
+      <main style={{ flex: 1 }} className="page-enter">
+        {children}
+      </main>
 
       <Footer />
     </div>
   );
 };
+
+/* ── NavLink ───────────────────────────────────────────────────── */
+function NavLink({
+  label,
+  path,
+  active,
+}: {
+  label: string;
+  path: string;
+  active: boolean;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <Link
+      to={path}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        fontFamily:     'var(--font-mono)',
+        fontSize:       '0.68rem',
+        letterSpacing:  '0.12em',
+        textTransform:  'uppercase',
+        textDecoration: 'none',
+        color:
+          active    ? 'var(--color-brass-300)' :
+          hovered   ? 'var(--color-ink-100)'   :
+                      'var(--color-ink-400)',
+        transition: 'color 0.15s',
+      }}
+    >
+      {label}
+    </Link>
+  );
+}
+
+/* ── NavCTA ────────────────────────────────────────────────────── */
+function NavCTA() {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <Link
+      to="/calculator"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        fontFamily:     'var(--font-mono)',
+        fontSize:       '0.68rem',
+        letterSpacing:  '0.1em',
+        textTransform:  'uppercase',
+        textDecoration: 'none',
+        padding:        '0.5rem 1.1rem',
+        border:         '1px solid var(--color-brass-500)',
+        color:          hovered ? 'var(--color-ink-950)' : 'var(--color-brass-300)',
+        background:     hovered ? 'var(--color-brass-500)' : 'transparent',
+        transition:     'all 0.2s ease',
+      }}
+    >
+      Calculate →
+    </Link>
+  );
+}
