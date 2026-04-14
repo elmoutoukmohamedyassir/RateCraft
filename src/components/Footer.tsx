@@ -2,17 +2,23 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 /* ── Data ──────────────────────────────────────────────────────── */
-const productLinks = [
-  { label: 'Calculator', path: '/calculator' },
-  { label: 'Blog',       path: '/blog'       },
-  { label: 'About',      path: '/about'      },
-  { label: 'Contact',    path: '/contact'    },
+const PRODUCT_LINKS = [
+  { label: 'Rate Calculator', path: '/calculator' },
+  { label: 'Blog',            path: '/blog'       },
+  { label: 'About',           path: '/about'      },
+  { label: 'Contact',         path: '/contact'    },
 ];
 
-const legalLinks = [
+const LEGAL_LINKS = [
   { label: 'Privacy Policy',   path: '/privacy'    },
   { label: 'Terms of Service', path: '/terms'      },
   { label: 'Disclaimer',       path: '/disclaimer' },
+];
+
+const TRUST_SIGNALS = [
+  'Free tool, no signup',
+  'Built for freelancers',
+  'Updated regularly',
 ];
 
 /* ── Footer ────────────────────────────────────────────────────── */
@@ -35,7 +41,38 @@ export function Footer() {
           padding:  '0 1.5rem',
         }}
       >
-        {/* ── Top grid ─────────────────────────────────────── */}
+        {/* ── Trust signals row ────────────────────────── */}
+        <div
+          style={{
+            display:        'flex',
+            gap:            '1.5rem',
+            flexWrap:       'wrap',
+            marginBottom:   '3rem',
+            paddingBottom:  '2rem',
+            borderBottom:   '1px solid var(--color-ink-800)',
+          }}
+        >
+          {TRUST_SIGNALS.map((signal) => (
+            <span
+              key={signal}
+              style={{
+                display:       'flex',
+                alignItems:    'center',
+                gap:           '0.4rem',
+                fontFamily:    'var(--font-mono)',
+                fontSize:      '0.62rem',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color:         'var(--color-ink-600)',
+              }}
+            >
+              <span style={{ color: 'var(--color-brass-600)', fontSize: '0.55rem' }}>✓</span>
+              {signal}
+            </span>
+          ))}
+        </div>
+
+        {/* ── Main grid ────────────────────────────────── */}
         <div
           style={{
             display:             'grid',
@@ -48,11 +85,7 @@ export function Footer() {
           <div style={{ gridColumn: 'span 2' }}>
             <Link
               to="/"
-              style={{
-                textDecoration: 'none',
-                display:        'inline-block',
-                marginBottom:   '1rem',
-              }}
+              style={{ textDecoration: 'none', display: 'inline-block', marginBottom: '1rem' }}
             >
               <span
                 style={{
@@ -63,23 +96,23 @@ export function Footer() {
                   letterSpacing: '-0.02em',
                 }}
               >
-                RateCraft
+                RateCrafts
               </span>
             </Link>
 
             <p
               style={{
-                fontFamily:    'var(--font-sans)',
-                fontSize:      '0.875rem',
-                fontWeight:    300,
-                color:         'var(--color-ink-400)',
-                lineHeight:    1.75,
-                maxWidth:      '300px',
-                marginBottom:  '1.25rem',
+                fontFamily:   'var(--font-sans)',
+                fontSize:     '0.875rem',
+                fontWeight:   300,
+                color:        'var(--color-ink-400)',
+                lineHeight:   1.75,
+                maxWidth:     '300px',
+                marginBottom: '1.25rem',
               }}
             >
-              Financial clarity for independent professionals.
-              Know what you're worth. Charge accordingly.
+              A free, independent tool built to help freelancers charge
+              what they're actually worth. No ads, no tracking, no signup.
             </p>
 
             <a
@@ -110,9 +143,8 @@ export function Footer() {
             >
               Product
             </p>
-
-            {productLinks.map((link) => (
-              <FooterLink key={link.path} {...link} />
+            {PRODUCT_LINKS.map((link) => (
+              <FooterLink key={link.path} label={link.label} path={link.path} />
             ))}
           </div>
 
@@ -130,14 +162,13 @@ export function Footer() {
             >
               Legal
             </p>
-
-            {legalLinks.map((link) => (
-              <FooterLink key={link.path} {...link} />
+            {LEGAL_LINKS.map((link) => (
+              <FooterLink key={link.path} label={link.label} path={link.path} />
             ))}
           </div>
         </div>
 
-        {/* ── Bottom bar ───────────────────────────────────── */}
+        {/* ── Bottom bar ───────────────────────────────── */}
         <div
           style={{
             borderTop:      '1px solid var(--color-ink-800)',
@@ -157,10 +188,9 @@ export function Footer() {
               color:         'var(--color-ink-600)',
             }}
           >
-            © {year} RateCraft — Built for the freelance community
+            © {year} RateCrafts — An independent tool for the freelance community
           </p>
 
-          {/* Decorative brass rule */}
           <div
             style={{
               width:      '2rem',

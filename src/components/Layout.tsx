@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Footer } from './Footer';
+import { Link, useLocation }          from 'react-router-dom';
+import { Footer }                     from './Footer';
 
-/* ── Nav data ──────────────────────────────────────────────────── */
-const navLinks = [
+/* ── Nav links ─────────────────────────────────────────────────── */
+const NAV_LINKS = [
   { label: 'Calculator', path: '/calculator' },
   { label: 'Blog',       path: '/blog'       },
   { label: 'About',      path: '/about'      },
@@ -16,16 +16,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [location]);
+  useEffect(() => { setMenuOpen(false); }, [location]);
 
-  // Detect scroll for nav background
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const isActive = (path: string) => location.pathname === path;
@@ -33,15 +29,44 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
 
-      {/* ── Navigation ─────────────────────────────────────── */}
+      {/* ── Top bar — trust signal ─────────────────────── */}
+      <div
+        style={{
+          background:     'var(--color-ink-900)',
+          borderBottom:   '1px solid var(--color-ink-800)',
+          padding:        '0.45rem 1.5rem',
+          display:        'flex',
+          alignItems:     'center',
+          justifyContent: 'center',
+          gap:            '2rem',
+        }}
+      >
+        {['Free tool, no signup required', 'Built for freelancers', '100% client-side — your data stays private'].map((msg) => (
+          <span
+            key={msg}
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '0.6rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color:         'var(--color-ink-500)',
+              whiteSpace:    'nowrap',
+            }}
+          >
+            {msg}
+          </span>
+        ))}
+      </div>
+
+      {/* ── Main nav ───────────────────────────────────── */}
       <nav
         style={{
           position:       'sticky',
           top:            0,
           zIndex:         50,
-          background:     scrolled ? 'rgba(17, 16, 9, 0.95)' : 'transparent',
+          background:     scrolled ? 'rgba(17, 16, 9, 0.96)' : 'transparent',
           borderBottom:   scrolled ? '1px solid var(--color-ink-800)' : '1px solid transparent',
-          backdropFilter: scrolled ? 'blur(16px)' : 'none',
+          backdropFilter: scrolled ? 'blur(16px)'               : 'none',
           transition:     'all 0.3s ease',
         }}
       >
@@ -82,7 +107,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                   fontFamily:    'var(--font-mono)',
                   fontSize:      '9px',
                   color:         'var(--color-brass-400)',
-                  letterSpacing: '0.05em',
+                  letterSpacing: '0.04em',
                 }}
               >
                 RC
@@ -97,16 +122,16 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 letterSpacing: '-0.02em',
               }}
             >
-              RateCraft
+              RateCrafts
             </span>
           </Link>
 
-          {/* Desktop nav links */}
+          {/* Desktop links */}
           <div
             className="hidden md:flex"
             style={{ alignItems: 'center', gap: '2.5rem' }}
           >
-            {navLinks.map((link) => (
+            {NAV_LINKS.map((link) => (
               <NavLink
                 key={link.path}
                 label={link.label}
@@ -114,8 +139,6 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 active={isActive(link.path)}
               />
             ))}
-
-            {/* CTA button */}
             <NavCTA />
           </div>
 
@@ -125,13 +148,13 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             aria-label="Toggle navigation menu"
             className="md:hidden"
             style={{
-              background: 'none',
-              border:     'none',
-              cursor:     'pointer',
-              padding:    '0.5rem',
-              display:    'flex',
+              background:    'none',
+              border:        'none',
+              cursor:        'pointer',
+              padding:       '0.5rem',
+              display:       'flex',
               flexDirection: 'column',
-              gap:        '5px',
+              gap:           '5px',
             }}
           >
             {[0, 1, 2].map((i) => (
@@ -154,7 +177,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </button>
         </div>
 
-        {/* Mobile menu drawer */}
+        {/* Mobile drawer */}
         {menuOpen && (
           <div
             style={{
@@ -163,7 +186,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               padding:     '1.5rem',
             }}
           >
-            {navLinks.map((link) => (
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -182,11 +205,29 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 {link.label}
               </Link>
             ))}
+            <Link
+              to="/calculator"
+              style={{
+                display:        'block',
+                marginTop:      '1.25rem',
+                padding:        '0.9rem 0',
+                fontFamily:     'var(--font-mono)',
+                fontSize:       '0.72rem',
+                letterSpacing:  '0.12em',
+                textTransform:  'uppercase',
+                color:          'var(--color-brass-300)',
+                textDecoration: 'none',
+                textAlign:      'center',
+                border:         '1px solid var(--color-brass-600)',
+              }}
+            >
+              Calculate your rate →
+            </Link>
           </div>
         )}
       </nav>
 
-      {/* ── Page content ───────────────────────────────────── */}
+      {/* ── Page content ───────────────────────────────── */}
       <main style={{ flex: 1 }} className="page-enter">
         {children}
       </main>
@@ -198,13 +239,9 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
 /* ── NavLink ───────────────────────────────────────────────────── */
 function NavLink({
-  label,
-  path,
-  active,
+  label, path, active,
 }: {
-  label: string;
-  path: string;
-  active: boolean;
+  label: string; path: string; active: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
 
@@ -220,9 +257,9 @@ function NavLink({
         textTransform:  'uppercase',
         textDecoration: 'none',
         color:
-          active    ? 'var(--color-brass-300)' :
-          hovered   ? 'var(--color-ink-100)'   :
-                      'var(--color-ink-400)',
+          active  ? 'var(--color-brass-300)'  :
+          hovered ? 'var(--color-ink-100)'    :
+                    'var(--color-ink-400)',
         transition: 'color 0.15s',
       }}
     >
@@ -253,7 +290,7 @@ function NavCTA() {
         transition:     'all 0.2s ease',
       }}
     >
-      Calculate →
+      Calculate your rate →
     </Link>
   );
 }

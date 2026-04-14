@@ -1,31 +1,16 @@
 import React from 'react';
-import { SEO } from '../components/SEO';
-import { motion } from 'motion/react';
+import { Link }           from 'react-router-dom';
+import { motion }         from 'motion/react';
+import { SEO }            from '../components/SEO';
 import { Mail, MessageSquare } from 'lucide-react';
-
-/* ── Contact cards data ────────────────────────────────────────── */
-const contactCards = [
-  {
-    icon:    Mail,
-    title:   'Email Us',
-    desc:    'For general inquiries and support.',
-    email:   'elmoutoukmohamedyassir@gmail.com',
-  },
-  {
-    icon:    MessageSquare,
-    title:   'Feedback',
-    desc:    'Suggest a new feature or tool.',
-    email:   'impact.me02@gmail.com',
-  },
-];
 
 /* ── Contact ───────────────────────────────────────────────────── */
 export default function Contact() {
   return (
     <div style={{ background: 'var(--color-ink-950)', minHeight: '100vh' }}>
       <SEO
-        title="Contact Us | RateCraft"
-        description="Get in touch with the RateCraft team."
+        title="Contact | RateCrafts"
+        description="Get in touch with the RateCrafts project — for feedback, feature suggestions, or general questions."
       />
 
       <main
@@ -33,7 +18,6 @@ export default function Contact() {
           maxWidth:  '720px',
           margin:    '0 auto',
           padding:   '5rem 1.5rem 6rem',
-          textAlign: 'center',
         }}
       >
         <motion.div
@@ -41,10 +25,8 @@ export default function Contact() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          {/* Label */}
           <p className="mono-label" style={{ marginBottom: '1.25rem' }}>Contact</p>
 
-          {/* Title */}
           <h1
             style={{
               fontFamily:    'var(--font-display)',
@@ -66,12 +48,13 @@ export default function Contact() {
               fontWeight:   300,
               color:        'var(--color-ink-300)',
               lineHeight:   1.75,
+              marginBottom: '3rem',
               maxWidth:     '480px',
-              margin:       '0 auto 3.5rem',
             }}
           >
-            Have questions about the calculator? Want to suggest a feature?
-            We're a small team and we love hearing from the freelance community.
+            RateCrafts is an independent project. If you have a question, a
+            suggestion, or just want to say the tool helped — reach out. Every
+            message gets read.
           </p>
 
           {/* Contact cards */}
@@ -84,76 +67,84 @@ export default function Contact() {
               marginBottom:        '2px',
             }}
           >
-            {contactCards.map((card) => {
-              const Icon = card.icon;
-              return (
+            {[
+              {
+                Icon:  Mail,
+                title: 'General',
+                desc:  'Questions, feedback, or anything else.',
+                email: 'elmoutoukmohamedyassir@gmail.com',
+              },
+              {
+                Icon:  MessageSquare,
+                title: 'Feature suggestions',
+                desc:  'Have an idea to make the calculator better?',
+                email: 'impact.me02@gmail.com',
+              },
+            ].map(({ Icon, title, desc, email }) => (
+              <div
+                key={email}
+                style={{
+                  background:    'var(--color-ink-900)',
+                  padding:       '2rem',
+                  display:       'flex',
+                  flexDirection: 'column',
+                  gap:           '0.75rem',
+                }}
+              >
                 <div
-                  key={card.email}
                   style={{
-                    background:     'var(--color-ink-900)',
-                    padding:        '2.25rem',
+                    width:          '40px',
+                    height:         '40px',
+                    border:         '1px solid var(--color-ink-700)',
                     display:        'flex',
-                    flexDirection:  'column',
                     alignItems:     'center',
-                    gap:            '0.75rem',
-                    textAlign:      'center',
+                    justifyContent: 'center',
+                    color:          'var(--color-brass-400)',
+                    marginBottom:   '0.25rem',
                   }}
                 >
-                  {/* Icon box */}
-                  <div
-                    style={{
-                      width:          '44px',
-                      height:         '44px',
-                      border:         '1px solid var(--color-ink-700)',
-                      display:        'flex',
-                      alignItems:     'center',
-                      justifyContent: 'center',
-                      color:          'var(--color-brass-400)',
-                      marginBottom:   '0.25rem',
-                    }}
-                  >
-                    <Icon size={18} />
-                  </div>
-
-                  <p
-                    style={{
-                      fontFamily:    'var(--font-display)',
-                      fontSize:      '1.1rem',
-                      fontWeight:    700,
-                      color:         'var(--color-ink-50)',
-                      letterSpacing: '-0.01em',
-                    }}
-                  >
-                    {card.title}
-                  </p>
-
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-sans)',
-                      fontSize:   '0.82rem',
-                      fontWeight: 300,
-                      color:      'var(--color-ink-400)',
-                    }}
-                  >
-                    {card.desc}
-                  </p>
-
-                  <a
-                    href={`mailto:${card.email}`}
-                    style={{
-                      fontFamily:     'var(--font-mono)',
-                      fontSize:       '0.72rem',
-                      letterSpacing:  '0.04em',
-                      color:          'var(--color-brass-300)',
-                      textDecoration: 'none',
-                      wordBreak:      'break-all',
-                    }}
-                  >
-                    {card.email}
-                  </a>
+                  <Icon size={16} />
                 </div>
-              );
-            })}
+
+                <p
+                  style={{
+                    fontFamily:    'var(--font-display)',
+                    fontSize:      '1.05rem',
+                    fontWeight:    700,
+                    color:         'var(--color-ink-50)',
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  {title}
+                </p>
+
+                <p
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize:   '0.82rem',
+                    fontWeight: 300,
+                    color:      'var(--color-ink-400)',
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {desc}
+                </p>
+
+                <a
+                  href={`mailto:${email}`}
+                  style={{
+                    fontFamily:     'var(--font-mono)',
+                    fontSize:       '0.7rem',
+                    letterSpacing:  '0.04em',
+                    color:          'var(--color-brass-300)',
+                    textDecoration: 'none',
+                    wordBreak:      'break-all',
+                  }}
+                >
+                  {email}
+                </a>
+              </div>
+            ))}
           </div>
 
           {/* Quote */}
@@ -163,23 +154,59 @@ export default function Contact() {
               border:      '1px solid var(--color-ink-800)',
               borderLeft:  '2px solid var(--color-brass-600)',
               padding:     '1.5rem 1.75rem',
-              textAlign:   'left',
             }}
           >
             <p
               style={{
-                fontFamily:  'var(--font-sans)',
-                fontSize:    '0.875rem',
-                fontWeight:  300,
-                fontStyle:   'italic',
-                color:       'var(--color-ink-300)',
-                lineHeight:  1.75,
-                margin:      0,
+                fontFamily: 'var(--font-sans)',
+                fontSize:   '0.875rem',
+                fontWeight: 300,
+                fontStyle:  'italic',
+                color:      'var(--color-ink-400)',
+                lineHeight: 1.75,
+                margin:     0,
               }}
             >
-              "We aim to respond to all inquiries within 24–48 business hours.
-              Thank you for being part of our journey to help freelancers succeed."
+              "I try to respond within 24–48 hours. RateCrafts is a side project
+              — your feedback directly shapes what gets built next."
             </p>
+          </div>
+
+          {/* Navigation links */}
+          <div
+            style={{
+              marginTop:   '2.5rem',
+              display:     'flex',
+              gap:         '1.5rem',
+              flexWrap:    'wrap',
+            }}
+          >
+            <Link
+              to="/calculator"
+              style={{
+                fontFamily:     'var(--font-mono)',
+                fontSize:       '0.68rem',
+                letterSpacing:  '0.1em',
+                textTransform:  'uppercase',
+                color:          'var(--color-brass-400)',
+                textDecoration: 'none',
+              }}
+            >
+              Try the calculator →
+            </Link>
+            <Link
+              to="/about"
+              style={{
+                fontFamily:     'var(--font-mono)',
+                fontSize:       '0.68rem',
+                letterSpacing:  '0.1em',
+                textTransform:  'uppercase',
+                color:          'var(--color-ink-600)',
+                textDecoration: 'none',
+              }}
+            >
+              About RateCrafts
+            </Link>
           </div>
         </motion.div>
       </main>

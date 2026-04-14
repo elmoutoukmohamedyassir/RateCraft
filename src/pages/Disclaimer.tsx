@@ -1,7 +1,7 @@
 import React from 'react';
 import { SEO } from '../components/SEO';
 
-const heading2Style: React.CSSProperties = {
+const H2: React.CSSProperties = {
   fontFamily:    'var(--font-display)',
   fontSize:      '1.2rem',
   fontWeight:    700,
@@ -11,7 +11,7 @@ const heading2Style: React.CSSProperties = {
   marginBottom:  '0.75rem',
 };
 
-const bodyStyle: React.CSSProperties = {
+const BODY: React.CSSProperties = {
   fontFamily:   'var(--font-sans)',
   fontSize:     '0.95rem',
   fontWeight:   300,
@@ -23,15 +23,12 @@ const bodyStyle: React.CSSProperties = {
 export default function Disclaimer() {
   return (
     <div style={{ background: 'var(--color-ink-950)', minHeight: '100vh' }}>
-      <SEO title="Disclaimer | RateCraft" />
+      <SEO
+        title="Disclaimer | RateCrafts"
+        description="RateCrafts provides rate estimates, not financial advice. Always consult a qualified advisor for tax and business decisions."
+      />
 
-      <main
-        style={{
-          maxWidth: '720px',
-          margin:   '0 auto',
-          padding:  '5rem 1.5rem 6rem',
-        }}
-      >
+      <main style={{ maxWidth: '720px', margin: '0 auto', padding: '5rem 1.5rem 6rem' }}>
         <p className="mono-label" style={{ marginBottom: '1.25rem' }}>Legal</p>
 
         <h1
@@ -89,41 +86,40 @@ export default function Disclaimer() {
               margin:     0,
             }}
           >
-            RateCraft is a tool designed to help freelancers estimate their
-            rates. It is not a substitute for professional financial, tax,
+            RateCrafts provides rate estimates to help freelancers build a pricing
+            foundation. It is not a substitute for professional financial, tax,
             or legal advice.
           </p>
         </div>
 
-        <h2 style={heading2Style}>1. Not Financial Advice</h2>
-        <p style={bodyStyle}>
-          The calculations provided by RateCraft are based on the data you
-          input and general mathematical formulas. They do not account for
-          your specific tax situation, local laws, or individual business
-          needs. Always consult with a qualified accountant or financial
-          advisor before making significant business decisions.
+        <h2 style={H2}>1. Not Financial Advice</h2>
+        <p style={BODY}>
+          The calculations provided by RateCrafts are based on the data you input
+          and general mathematical formulas. They do not account for your specific
+          tax situation, local laws, or individual business needs. Always consult
+          a qualified accountant or financial advisor before making significant
+          business decisions.
         </p>
 
-        <h2 style={heading2Style}>2. Accuracy of Information</h2>
-        <p style={bodyStyle}>
-          While we strive to keep the calculator accurate and up-to-date, we
+        <h2 style={H2}>2. Accuracy of Information</h2>
+        <p style={BODY}>
+          We strive to keep the calculator accurate and up-to-date. However, we
           make no guarantees regarding the completeness or reliability of the
-          results. Market conditions and tax laws change frequently, and
-          RateCraft may not reflect the most current information.
+          results. Tax laws and market conditions change frequently.
         </p>
 
-        <h2 style={heading2Style}>3. Limitation of Liability</h2>
-        <p style={bodyStyle}>
-          By using RateCraft, you acknowledge that you are doing so at your
-          own risk. We will not be liable for any losses or damages arising
-          from your use of this tool or reliance on its results.
+        <h2 style={H2}>3. Limitation of Liability</h2>
+        <p style={BODY}>
+          By using RateCrafts, you acknowledge that you do so at your own risk.
+          We are not liable for any losses or damages arising from your use of
+          this tool or reliance on its results.
         </p>
 
-        <h2 style={heading2Style}>4. External Links</h2>
-        <p style={bodyStyle}>
-          Our blog and resources may contain links to external websites.
-          We do not control or endorse the content of these sites and are
-          not responsible for their accuracy or privacy practices.
+        <h2 style={H2}>4. External Links</h2>
+        <p style={BODY}>
+          Our blog and resources may contain links to external websites. We do not
+          control or endorse the content of those sites and are not responsible for
+          their accuracy or privacy practices.
         </p>
       </main>
     </div>
