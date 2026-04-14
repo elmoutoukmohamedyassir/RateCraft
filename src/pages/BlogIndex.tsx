@@ -1,118 +1,749 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { SEO } from '../components/SEO';
-import { motion } from 'motion/react';
+import { Link }             from 'react-router-dom';
+import { motion }           from 'motion/react';
+import { SEO }              from '../components/SEO';
 
-const posts = [
-  { id: 'how-to-calculate-freelance-rate', title: 'How to Calculate Your Freelance Rate: A Step-by-Step Guide', excerpt: 'Learn how to calculate a sustainable freelance hourly rate using income goals, taxes, expenses, billable hours, and profit margin.', date: 'April 5, 2026', readTime: '10 min', category: 'Strategy' },
-  { id: 'hourly-vs-project-pricing', title: 'Hourly vs Project Pricing: Which Model Is Better for Freelancers?', excerpt: 'Compare hourly and project pricing to see which model works better for your freelance services, client type, and profit goals.', date: 'April 4, 2026', readTime: '9 min', category: 'Pricing' },
-  { id: 'hidden-costs-of-freelancing', title: '7 Hidden Costs of Freelancing That Destroy Profit Margins', excerpt: 'From taxes to software bloat and non-billable time, discover the hidden costs freelancers often forget when setting rates.', date: 'April 2, 2026', readTime: '8 min', category: 'Finance' },
-  { id: 'freelance-pricing-mistakes', title: '5 Freelance Pricing Mistakes That Keep You Underpaid', excerpt: 'These common pricing mistakes quietly destroy freelance income. Learn how to spot them and build a stronger pricing strategy.', date: 'April 1, 2026', readTime: '7 min', category: 'Pricing' },
-  { id: 'beginner-freelancer-rate', title: 'How Much Should a Beginner Freelancer Charge?', excerpt: 'A practical guide to setting your first freelance rate without guessing, panicking, or underpricing your work.', date: 'March 30, 2026', readTime: '8 min', category: 'Beginner' },
-  { id: 'raising-your-rates', title: 'How to Raise Your Freelance Rates Without Losing Good Clients', excerpt: 'Raise your freelance prices professionally, communicate value clearly, and keep strong client relationships intact.', date: 'March 28, 2026', readTime: '8 min', category: 'Business' },
-  { id: 'daily-rate-calculation', title: 'How to Convert an Hourly Rate Into a Professional Day Rate', excerpt: 'Learn how to turn your hourly baseline into a clean, client-friendly day rate for consulting and freelance services.', date: 'March 27, 2026', readTime: '6 min', category: 'Pricing' },
-  { id: 'profit-margin-for-freelancers', title: 'Why Freelancers Need a Profit Margin, Not Just Income', excerpt: 'Freelancers who ignore profit margin often stay busy but financially fragile. Here is why margin matters.', date: 'March 24, 2026', readTime: '7 min', category: 'Finance' },
-  { id: 'billable-hours-guide', title: 'How Many Billable Hours Can a Freelancer Realistically Work?', excerpt: 'Stop overestimating billable time. Learn what a realistic weekly billable-hour range looks like for freelancers.', date: 'March 21, 2026', readTime: '7 min', category: 'Productivity' },
-  { id: 'quote-a-project-profitably', title: 'How to Quote a Freelance Project Without Underpricing It', excerpt: 'Build better project quotes using a strong pricing foundation, realistic scope, and your true hourly floor.', date: 'March 19, 2026', readTime: '8 min', category: 'Business' },
-  { id: 'freelance-rate-too-low', title: 'How to Know If Your Freelance Rate Is Too Low', excerpt: 'If you feel busy but still broke, your rate may be the problem. Here are the clearest signs you are undercharging.', date: 'March 16, 2026', readTime: '6 min', category: 'Strategy' },
+/* ── Types ─────────────────────────────────────────────────────── */
+interface Post {
+  id:       string;
+  title:    string;
+  excerpt:  string;
+  date:     string;
+  readTime: string;
+  category: string;
+  image:    string;
+}
+
+/* ── Post data ─────────────────────────────────────────────────── */
+export const ALL_POSTS: Post[] = [
+  {
+    id:       'how-to-calculate-freelance-rate',
+    title:    'How to Calculate Your Freelance Rate: A Step-by-Step Guide',
+    excerpt:  'Work backward from what you need — not forward from what competitors charge. A structured method for pricing your services properly.',
+    date:     'April 5, 2026',
+    readTime: '10 min',
+    category: 'Strategy',
+    image:    'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id:       'hourly-vs-project-pricing',
+    title:    'Hourly vs Project Pricing: Which Model Is Better for Freelancers?',
+    excerpt:  'Both models can work — but for very different business situations. Here is how to choose the right one for your niche.',
+    date:     'April 4, 2026',
+    readTime: '9 min',
+    category: 'Pricing',
+    image:    'https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id:       'hidden-costs-of-freelancing',
+    title:    '7 Hidden Costs of Freelancing That Destroy Profit Margins',
+    excerpt:  'From taxes to software bloat and non-billable time — the costs every freelancer forgets when setting rates.',
+    date:     'April 2, 2026',
+    readTime: '8 min',
+    category: 'Finance',
+    image:    'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id:       'freelance-pricing-mistakes',
+    title:    '5 Freelance Pricing Mistakes That Keep You Underpaid',
+    excerpt:  'Common mistakes that quietly destroy freelance income. Recognise them and build a pricing strategy that actually holds.',
+    date:     'April 1, 2026',
+    readTime: '7 min',
+    category: 'Pricing',
+    image:    'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id:       'beginner-freelancer-rate',
+    title:    'How Much Should a Beginner Freelancer Charge?',
+    excerpt:  'Being new does not mean underpricing. Here is how to set a real minimum rate on day one — without panic or guesswork.',
+    date:     'March 30, 2026',
+    readTime: '8 min',
+    category: 'Beginner',
+    image:    'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id:       'raising-your-rates',
+    title:    'How to Raise Your Freelance Rates Without Losing Good Clients',
+    excerpt:  'Professional, justified, and well-communicated rate increases that strengthen client relationships rather than damage them.',
+    date:     'March 28, 2026',
+    readTime: '8 min',
+    category: 'Business',
+    image:    'https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id:       'daily-rate-calculation',
+    title:    'How to Convert an Hourly Rate Into a Professional Day Rate',
+    excerpt:  'Turn your hourly baseline into a clean, client-friendly day rate for consulting, design, and strategy engagements.',
+    date:     'March 27, 2026',
+    readTime: '6 min',
+    category: 'Pricing',
+    image:    'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id:       'profit-margin-for-freelancers',
+    title:    'Why Freelancers Need a Profit Margin, Not Just Income',
+    excerpt:  'Busy but financially fragile? Margin is the missing piece. Here is why profit matters more than revenue.',
+    date:     'March 24, 2026',
+    readTime: '7 min',
+    category: 'Finance',
+    image:    'https://images.unsplash.com/photo-1553729784-e91953dec042?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id:       'billable-hours-guide',
+    title:    'How Many Billable Hours Can a Freelancer Realistically Work?',
+    excerpt:  'Stop overestimating. Here is what a realistic billable week looks like — and why it matters for your rate.',
+    date:     'March 21, 2026',
+    readTime: '7 min',
+    category: 'Productivity',
+    image:    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id:       'quote-a-project-profitably',
+    title:    'How to Quote a Freelance Project Without Underpricing It',
+    excerpt:  'Build better project quotes using a strong pricing foundation, realistic scope, and your true hourly floor.',
+    date:     'March 19, 2026',
+    readTime: '8 min',
+    category: 'Business',
+    image:    'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id:       'freelance-rate-too-low',
+    title:    'How to Know If Your Freelance Rate Is Too Low',
+    excerpt:  'Busy but broke? Your rate may be the problem. Here are the clearest signs you are undercharging right now.',
+    date:     'March 16, 2026',
+    readTime: '6 min',
+    category: 'Strategy',
+    image:    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
+  },
 ];
 
-const allCategories = ['All', ...Array.from(new Set(posts.map(p => p.category)))];
-
-const categoryColor: Record<string, string> = {
-  Strategy: 'var(--color-brass-500)',
-  Pricing: 'var(--color-verdigris-light)',
-  Finance: '#c084fc',
-  Beginner: '#60a5fa',
-  Business: '#f87171',
-  Productivity: '#34d399',
+/* ── Category color map ────────────────────────────────────────── */
+const CATEGORY_COLORS: Record<string, string> = {
+  Strategy:   '#e8b830',
+  Pricing:    '#3abba8',
+  Finance:    '#a78bfa',
+  Beginner:   '#60a5fa',
+  Business:   '#f87171',
+  Productivity:'#34d399',
 };
 
+const ALL_CATEGORIES = ['All', ...Array.from(new Set(ALL_POSTS.map((p) => p.category)))];
+
+/* ── BlogIndex ─────────────────────────────────────────────────── */
 export default function BlogIndex() {
-  const [active, setActive] = useState('All');
-  const filtered = active === 'All' ? posts : posts.filter(p => p.category === active);
+  const [activeCategory, setActiveCategory] = useState('All');
+
+  const filteredPosts =
+    activeCategory === 'All'
+      ? ALL_POSTS
+      : ALL_POSTS.filter((p) => p.category === activeCategory);
+
+  // Schema markup for SEO
+  const blogListSchema = {
+    '@context':  'https://schema.org',
+    '@type':     'Blog',
+    name:        'RateCraft Journal',
+    description: 'Practical guides on freelance pricing, billable hours, profitability, and building a sustainable business.',
+    url:         'https://ratecraft.io/blog',
+    blogPost:    ALL_POSTS.map((p) => ({
+      '@type':       'BlogPosting',
+      headline:       p.title,
+      datePublished:  p.date,
+      url:           `https://ratecraft.io/blog/${p.id}`,
+    })),
+  };
 
   return (
     <div style={{ background: 'var(--color-ink-950)', minHeight: '100vh' }}>
-      <SEO title="Blog | RateCraft" description="Practical guides on freelance pricing, billable hours, profitability, and business strategy." />
+      <SEO
+        title="Freelance Pricing Blog | RateCraft Journal"
+        description="Practical guides on freelance hourly rates, pricing strategy, billable hours, and building a profitable freelance business."
+      >
+        <script type="application/ld+json">{JSON.stringify(blogListSchema)}</script>
+        <link rel="canonical" href="https://ratecraft.io/blog" />
+      </SEO>
 
-      {/* Header */}
-      <header style={{ padding: '5rem 1.5rem 4rem', borderBottom: '1px solid var(--color-ink-800)', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(var(--color-ink-800) 1px, transparent 1px), linear-gradient(90deg, var(--color-ink-800) 1px, transparent 1px)', backgroundSize: '40px 40px', opacity: 0.2 }} />
-        <div className="max-w-7xl mx-auto" style={{ position: 'relative', zIndex: 1 }}>
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-brass-500)', display: 'block', marginBottom: '1.25rem' }}>Journal</span>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 900, color: 'var(--color-ink-50)', letterSpacing: '-0.03em', lineHeight: 1.0, marginBottom: '1rem' }}>
-              The RateCraft<br /><em style={{ color: 'var(--color-brass-400)', fontStyle: 'italic' }}>Journal</em>
-            </h1>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 300, color: 'var(--color-ink-500)', maxWidth: '480px', lineHeight: 1.7 }}>
-              Practical guides on freelance pricing, billable hours, profitability, and building a business that lasts.
-            </p>
-          </motion.div>
-        </div>
+      {/* ── Header ─────────────────────────────────────────── */}
+      <header
+        style={{
+          padding:      '5rem 1.5rem 4rem',
+          borderBottom: '1px solid var(--color-ink-800)',
+          position:     'relative',
+          overflow:     'hidden',
+        }}
+      >
+        {/* Grid bg */}
+        <div
+          style={{
+            position:        'absolute',
+            inset:           0,
+            backgroundImage: 'linear-gradient(var(--color-ink-800) 1px, transparent 1px), linear-gradient(90deg, var(--color-ink-800) 1px, transparent 1px)',
+            backgroundSize:  '40px 40px',
+            opacity:         0.2,
+            pointerEvents:   'none',
+          }}
+        />
+
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1 }}
+        >
+          <p className="mono-label" style={{ marginBottom: '1.25rem' }}>Journal</p>
+
+          <h1
+            style={{
+              fontFamily:    'var(--font-display)',
+              fontSize:      'clamp(2.5rem, 6vw, 4.5rem)',
+              fontWeight:    900,
+              color:         'var(--color-ink-50)',
+              letterSpacing: '-0.03em',
+              lineHeight:    0.97,
+              marginBottom:  '1.25rem',
+            }}
+          >
+            The RateCraft
+            <br />
+            <em style={{ color: 'var(--color-brass-300)', fontStyle: 'italic' }}>Journal</em>
+          </h1>
+
+          <p
+            style={{
+              fontFamily:   'var(--font-sans)',
+              fontSize:     '1rem',
+              fontWeight:   300,
+              color:        'var(--color-ink-300)',
+              maxWidth:     '460px',
+              lineHeight:   1.75,
+              marginBottom: '2rem',
+            }}
+          >
+            Practical guides on freelance pricing, billable hours, and
+            building a business that lasts — starting with knowing your number.
+          </p>
+
+          {/* Internal link to calculator — strong SEO signal */}
+          <Link
+            to="/calculator"
+            style={{
+              display:        'inline-flex',
+              alignItems:     'center',
+              gap:            '0.5rem',
+              fontFamily:     'var(--font-mono)',
+              fontSize:       '0.68rem',
+              letterSpacing:  '0.1em',
+              textTransform:  'uppercase',
+              color:          'var(--color-brass-300)',
+              textDecoration: 'none',
+              border:         '1px solid rgba(212,160,23,0.3)',
+              padding:        '0.5rem 1rem',
+              transition:     'all 0.2s',
+            }}
+          >
+            → Try the free rate calculator
+          </Link>
+        </motion.div>
       </header>
 
-      {/* Filter bar */}
-      <div style={{ borderBottom: '1px solid var(--color-ink-800)', background: 'var(--color-ink-900)', padding: '0 1.5rem', position: 'sticky', top: '64px', zIndex: 40 }}>
-        <div className="max-w-7xl mx-auto" style={{ display: 'flex', gap: '0', overflowX: 'auto' }}>
-          {allCategories.map(cat => (
-            <button key={cat} onClick={() => setActive(cat)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '1rem 1.25rem', background: 'none', border: 'none', borderBottom: active === cat ? '1px solid var(--color-brass-500)' : '1px solid transparent', color: active === cat ? 'var(--color-brass-400)' : 'var(--color-ink-600)', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'color 0.15s', marginBottom: '-1px' }}>
-              {cat}
-            </button>
+      {/* ── Category filter tabs ────────────────────────────── */}
+      <div
+        style={{
+          borderBottom:   '1px solid var(--color-ink-800)',
+          background:     'rgba(17, 16, 9, 0.95)',
+          backdropFilter: 'blur(12px)',
+          padding:        '0 1.5rem',
+          position:       'sticky',
+          top:            '64px',
+          zIndex:         40,
+          overflowX:      'auto',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1280px',
+            margin:   '0 auto',
+            display:  'flex',
+            gap:      0,
+          }}
+        >
+          {ALL_CATEGORIES.map((cat) => (
+            <CategoryTab
+              key={cat}
+              label={cat}
+              active={activeCategory === cat}
+              color={CATEGORY_COLORS[cat]}
+              onClick={() => setActiveCategory(cat)}
+            />
           ))}
         </div>
       </div>
 
-      {/* Grid */}
-      <main className="max-w-7xl mx-auto" style={{ padding: '3rem 1.5rem 6rem' }}>
-        {/* Featured post */}
-        {active === 'All' && (
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} style={{ marginBottom: '1px' }}>
-            <Link to={`/blog/${posts[0].id}`} style={{ textDecoration: 'none', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', background: 'var(--color-ink-900)', border: '1px solid var(--color-ink-800)', marginBottom: '1px', transition: 'background 0.2s' }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--color-ink-800)'}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'var(--color-ink-900)'}>
-              <div style={{ padding: '2.5rem 2.5rem 2.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: categoryColor[posts[0].category] || 'var(--color-brass-500)', border: `1px solid ${categoryColor[posts[0].category] || 'var(--color-brass-500)'}22`, padding: '0.2rem 0.6rem' }}>{posts[0].category}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.08em', color: 'var(--color-ink-700)', textTransform: 'uppercase' }}>Featured</span>
-                </div>
-                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, color: 'var(--color-ink-50)', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: '1rem' }}>{posts[0].title}</h2>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--color-ink-500)', lineHeight: 1.75, marginBottom: '2rem' }}>{posts[0].excerpt}</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.06em', color: 'var(--color-ink-700)', textTransform: 'uppercase' }}>{posts[0].date}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.06em', color: 'var(--color-ink-700)', textTransform: 'uppercase' }}>{posts[0].readTime} read</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.08em', color: 'var(--color-brass-400)', marginLeft: 'auto' }}>Read →</span>
-                </div>
-              </div>
-              <div style={{ background: 'var(--color-ink-800)', minHeight: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontFamily: 'var(--font-display)', fontSize: '5rem', fontWeight: 900, fontStyle: 'italic', color: 'var(--color-ink-700)', letterSpacing: '-0.04em', userSelect: 'none' }}>$</span>
-              </div>
-            </Link>
+      {/* ── Main content ───────────────────────────────────── */}
+      <main
+        style={{
+          maxWidth: '1280px',
+          margin:   '0 auto',
+          padding:  '3rem 1.5rem 6rem',
+        }}
+      >
+
+        {/* Featured post (only when showing All) */}
+        {activeCategory === 'All' && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            style={{ marginBottom: '2px' }}
+          >
+            <FeaturedPost post={ALL_POSTS[0]} />
           </motion.div>
         )}
 
-        {/* Regular grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1px', background: 'var(--color-ink-800)', border: '1px solid var(--color-ink-800)' }}>
-          {(active === 'All' ? filtered.slice(1) : filtered).map((post, idx) => (
-            <motion.div key={post.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.04, duration: 0.3 }}>
-              <Link to={`/blog/${post.id}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', background: 'var(--color-ink-950)', padding: '1.75rem', height: '100%', boxSizing: 'border-box', transition: 'background 0.2s' }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--color-ink-900)'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'var(--color-ink-950)'}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: categoryColor[post.category] || 'var(--color-brass-500)', border: `1px solid ${categoryColor[post.category] || 'var(--color-brass-500)'}33`, padding: '0.18rem 0.55rem' }}>{post.category}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--color-ink-700)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{post.readTime}</span>
-                </div>
-                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: 'var(--color-ink-100)', letterSpacing: '-0.01em', lineHeight: 1.35, marginBottom: '0.75rem', flex: 1 }}>{post.title}</h2>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', fontWeight: 300, color: 'var(--color-ink-600)', lineHeight: 1.65, marginBottom: '1.25rem' }}>{post.excerpt}</p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--color-ink-800)', paddingTop: '1rem' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--color-ink-700)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{post.date}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--color-brass-500)', letterSpacing: '0.06em' }}>→</span>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+        {/* Post grid */}
+        <div
+          style={{
+            display:             'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap:                 '2px',
+            background:          'var(--color-ink-800)',
+            border:              '1px solid var(--color-ink-800)',
+          }}
+        >
+          {(activeCategory === 'All' ? filteredPosts.slice(1) : filteredPosts).map(
+            (post, idx) => (
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.04, duration: 0.28 }}
+              >
+                <PostCard post={post} />
+              </motion.div>
+            ),
+          )}
+        </div>
+
+        {/* ── Bottom CTA with internal links ─────────────── */}
+        <div
+          style={{
+            marginTop:   '4rem',
+            padding:     '2.5rem',
+            background:  'var(--color-ink-900)',
+            border:      '1px solid var(--color-ink-800)',
+            borderLeft:  '2px solid var(--color-brass-500)',
+            display:     'flex',
+            flexDirection:'column',
+            gap:         '1.25rem',
+          }}
+        >
+          <p
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '0.62rem',
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color:         'var(--color-brass-500)',
+            }}
+          >
+            Ready to apply what you've learned?
+          </p>
+
+          <p
+            style={{
+              fontFamily:   'var(--font-display)',
+              fontSize:     '1.35rem',
+              fontWeight:   700,
+              color:        'var(--color-ink-50)',
+              letterSpacing:'-0.02em',
+              lineHeight:   1.25,
+            }}
+          >
+            Stop reading about rates. Go calculate yours.
+          </p>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+            <Link
+              to="/calculator"
+              style={{
+                fontFamily:     'var(--font-mono)',
+                fontSize:       '0.72rem',
+                letterSpacing:  '0.1em',
+                textTransform:  'uppercase',
+                padding:        '0.75rem 1.75rem',
+                background:     'var(--color-brass-500)',
+                color:          'var(--color-ink-950)',
+                textDecoration: 'none',
+                fontWeight:     500,
+              }}
+            >
+              Open Rate Calculator →
+            </Link>
+            <Link
+              to="/about"
+              style={{
+                fontFamily:     'var(--font-mono)',
+                fontSize:       '0.68rem',
+                letterSpacing:  '0.1em',
+                textTransform:  'uppercase',
+                color:          'var(--color-ink-500)',
+                textDecoration: 'none',
+              }}
+            >
+              About RateCraft
+            </Link>
+            <Link
+              to="/contact"
+              style={{
+                fontFamily:     'var(--font-mono)',
+                fontSize:       '0.68rem',
+                letterSpacing:  '0.1em',
+                textTransform:  'uppercase',
+                color:          'var(--color-ink-500)',
+                textDecoration: 'none',
+              }}
+            >
+              Contact Us
+            </Link>
+          </div>
         </div>
       </main>
     </div>
+  );
+}
+
+/* ── Sub-components ────────────────────────────────────────────── */
+
+function CategoryTab({
+  label,
+  active,
+  color,
+  onClick,
+}: {
+  label:   string;
+  active:  boolean;
+  color?:  string;
+  onClick: () => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const accentColor = color || 'var(--color-brass-500)';
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        fontFamily:    'var(--font-mono)',
+        fontSize:      '0.62rem',
+        letterSpacing: '0.14em',
+        textTransform: 'uppercase',
+        padding:       '1rem 1.1rem',
+        background:    'none',
+        border:        'none',
+        borderBottom:  active
+          ? `2px solid ${accentColor}`
+          : '2px solid transparent',
+        color:      active ? accentColor : hovered ? 'var(--color-ink-200)' : 'var(--color-ink-500)',
+        cursor:     'pointer',
+        whiteSpace: 'nowrap',
+        transition: 'color 0.15s, border-color 0.15s',
+        marginBottom: '-1px',
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
+function FeaturedPost({ post }: { post: Post }) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <Link
+      to={`/blog/${post.id}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        textDecoration:      'none',
+        display:             'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        background:          hovered ? 'var(--color-ink-800)' : 'var(--color-ink-900)',
+        border:              '1px solid var(--color-ink-800)',
+        overflow:            'hidden',
+        transition:          'background 0.2s',
+      }}
+    >
+      {/* Text side */}
+      <div style={{ padding: '2.5rem' }}>
+        <div
+          style={{
+            display:      'flex',
+            alignItems:   'center',
+            gap:          '0.75rem',
+            marginBottom: '1.5rem',
+          }}
+        >
+          <span
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '0.58rem',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color:         CATEGORY_COLORS[post.category] || 'var(--color-brass-400)',
+              border:        `1px solid ${CATEGORY_COLORS[post.category] || 'var(--color-brass-400)'}33`,
+              padding:       '0.2rem 0.6rem',
+            }}
+          >
+            {post.category}
+          </span>
+
+          <span
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '0.58rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color:         'var(--color-brass-600)',
+              background:    'rgba(212,160,23,0.08)',
+              padding:       '0.2rem 0.6rem',
+            }}
+          >
+            Featured
+          </span>
+        </div>
+
+        <h2
+          style={{
+            fontFamily:    'var(--font-display)',
+            fontSize:      'clamp(1.5rem, 3vw, 2rem)',
+            fontWeight:    700,
+            color:         'var(--color-ink-50)',
+            letterSpacing: '-0.025em',
+            lineHeight:    1.2,
+            marginBottom:  '1rem',
+          }}
+        >
+          {post.title}
+        </h2>
+
+        <p
+          style={{
+            fontFamily:   'var(--font-sans)',
+            fontSize:     '0.9rem',
+            fontWeight:   300,
+            color:        'var(--color-ink-300)',
+            lineHeight:   1.75,
+            marginBottom: '2rem',
+          }}
+        >
+          {post.excerpt}
+        </p>
+
+        <div
+          style={{
+            display:    'flex',
+            alignItems: 'center',
+            gap:        '1.5rem',
+          }}
+        >
+          <span
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '0.6rem',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color:         'var(--color-ink-600)',
+            }}
+          >
+            {post.date}
+          </span>
+          <span
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '0.6rem',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color:         'var(--color-ink-600)',
+            }}
+          >
+            {post.readTime} read
+          </span>
+          <span
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '0.68rem',
+              color:         'var(--color-brass-400)',
+              marginLeft:    'auto',
+            }}
+          >
+            Read →
+          </span>
+        </div>
+      </div>
+
+      {/* Image side */}
+      <div style={{ minHeight: '240px', overflow: 'hidden' }}>
+        <img
+          src={post.image}
+          alt={post.title}
+          referrerPolicy="no-referrer"
+          style={{
+            width:      '100%',
+            height:     '100%',
+            objectFit:  'cover',
+            filter:     `brightness(${hovered ? 0.75 : 0.6}) sepia(0.25)`,
+            transform:  hovered ? 'scale(1.03)' : 'scale(1)',
+            transition: 'transform 0.5s ease, filter 0.3s ease',
+          }}
+        />
+      </div>
+    </Link>
+  );
+}
+
+function PostCard({ post }: { post: Post }) {
+  const [hovered, setHovered] = useState(false);
+  const catColor = CATEGORY_COLORS[post.category] || 'var(--color-brass-400)';
+
+  return (
+    <Link
+      to={`/blog/${post.id}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background:     hovered ? 'var(--color-ink-900)' : 'var(--color-ink-950)',
+        textDecoration: 'none',
+        display:        'flex',
+        flexDirection:  'column',
+        height:         '100%',
+        overflow:       'hidden',
+        transition:     'background 0.2s',
+      }}
+    >
+      {/* Image */}
+      <div style={{ height: '170px', overflow: 'hidden', flexShrink: 0 }}>
+        <img
+          src={post.image}
+          alt={post.title}
+          referrerPolicy="no-referrer"
+          style={{
+            width:      '100%',
+            height:     '100%',
+            objectFit:  'cover',
+            filter:     `brightness(${hovered ? 0.75 : 0.6}) sepia(0.2)`,
+            transform:  hovered ? 'scale(1.05)' : 'scale(1)',
+            transition: 'transform 0.4s ease, filter 0.3s ease',
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div
+        style={{
+          padding:       '1.5rem',
+          flex:          1,
+          display:       'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {/* Meta row */}
+        <div
+          style={{
+            display:      'flex',
+            alignItems:   'center',
+            justifyContent:'space-between',
+            marginBottom: '0.85rem',
+          }}
+        >
+          <span
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '0.56rem',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color:         catColor,
+              border:        `1px solid ${catColor}33`,
+              padding:       '0.18rem 0.5rem',
+            }}
+          >
+            {post.category}
+          </span>
+          <span
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '0.56rem',
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              color:         'var(--color-ink-600)',
+            }}
+          >
+            {post.readTime}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h2
+          style={{
+            fontFamily:    'var(--font-display)',
+            fontSize:      '1rem',
+            fontWeight:    700,
+            color:         'var(--color-ink-100)',
+            letterSpacing: '-0.01em',
+            lineHeight:    1.35,
+            marginBottom:  '0.65rem',
+            flex:          1,
+          }}
+        >
+          {post.title}
+        </h2>
+
+        {/* Excerpt */}
+        <p
+          style={{
+            fontFamily:   'var(--font-sans)',
+            fontSize:     '0.8rem',
+            fontWeight:   300,
+            color:        'var(--color-ink-400)',
+            lineHeight:   1.65,
+            marginBottom: '1.1rem',
+          }}
+        >
+          {post.excerpt}
+        </p>
+
+        {/* Footer row */}
+        <div
+          style={{
+            display:        'flex',
+            alignItems:     'center',
+            justifyContent: 'space-between',
+            borderTop:      '1px solid var(--color-ink-800)',
+            paddingTop:     '0.9rem',
+          }}
+        >
+          <span
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '0.58rem',
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              color:         'var(--color-ink-600)',
+            }}
+          >
+            {post.date}
+          </span>
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize:   '0.65rem',
+              color:      'var(--color-brass-500)',
+            }}
+          >
+            →
+          </span>
+        </div>
+      </div>
+    </Link>
   );
 }
