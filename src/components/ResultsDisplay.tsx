@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CalculationResults } from '../types';
-import { motion } from 'motion/react';
+import { motion }             from 'motion/react';
 
 /* ── Types ─────────────────────────────────────────────────────── */
 interface ResultsDisplayProps {
@@ -17,6 +17,9 @@ const formatCurrency = (value: number) =>
 
 /* ── ResultsDisplay ────────────────────────────────────────────── */
 export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
+  const [email,     setEmail]     = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
   const {
     recommendedHourlyRate,
     recommendedDayRate,
@@ -35,6 +38,11 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
     { label: 'Profit buffer',     value: formatCurrency(monthlyProfitAmount)            },
   ];
 
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim()) setSubmitted(true);
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
 
@@ -51,7 +59,6 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
           overflow:   'hidden',
         }}
       >
-        {/* Top brass accent bar */}
         <div
           style={{
             position:   'absolute',
@@ -62,7 +69,6 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
             background: 'linear-gradient(90deg, var(--color-brass-600), var(--color-brass-300))',
           }}
         />
-
         <p
           style={{
             fontFamily:    'var(--font-mono)',
@@ -75,7 +81,6 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
         >
           Recommended Hourly Rate
         </p>
-
         <p
           style={{
             fontFamily:    'var(--font-display)',
@@ -89,19 +94,12 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
         >
           {formatCurrency(recommendedHourlyRate)}
         </p>
-
-        <p
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize:   '0.65rem',
-            color:      'var(--color-ink-500)',
-          }}
-        >
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--color-ink-500)' }}>
           per hour
         </p>
       </motion.div>
 
-      {/* ── Day rate card ──────────────────────────────────── */}
+      {/* ── Day rate ───────────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -124,7 +122,6 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
         >
           Day Rate
         </p>
-
         <p
           style={{
             fontFamily:    'var(--font-display)',
@@ -138,11 +135,11 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
         </p>
       </motion.div>
 
-      {/* ── Monthly & yearly targets ───────────────────────── */}
+      {/* ── Monthly / Yearly ───────────────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }}>
         {[
-          { label: 'Monthly Target', value: formatCurrency(monthlyRevenueTarget) },
-          { label: 'Yearly Target',  value: formatCurrency(yearlyRevenueTarget)  },
+          { label: 'Monthly Target', value: formatCurrency(monthlyRevenueTarget)  },
+          { label: 'Yearly Target',  value: formatCurrency(yearlyRevenueTarget)   },
         ].map((card, i) => (
           <motion.div
             key={card.label}
@@ -167,15 +164,7 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
             >
               {card.label}
             </p>
-
-            <p
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize:   '1.05rem',
-                fontWeight: 500,
-                color:      'var(--color-ink-200)',
-              }}
-            >
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '1.05rem', fontWeight: 500, color: 'var(--color-ink-200)' }}>
               {card.value}
             </p>
           </motion.div>
@@ -207,41 +196,21 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
         >
           Monthly Breakdown
         </p>
-
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
           {breakdownRows.map((row) => (
             <div
               key={row.label}
-              style={{
-                display:        'flex',
-                justifyContent: 'space-between',
-                alignItems:     'baseline',
-              }}
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}
             >
-              <span
-                style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize:   '0.83rem',
-                  fontWeight: 300,
-                  color:      'var(--color-ink-400)',
-                }}
-              >
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.83rem', fontWeight: 300, color: 'var(--color-ink-400)' }}>
                 {row.label}
               </span>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize:   '0.83rem',
-                  color:      'var(--color-ink-200)',
-                }}
-              >
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.83rem', color: 'var(--color-ink-200)' }}>
                 {row.value}
               </span>
             </div>
           ))}
         </div>
-
-        {/* Total row */}
         <div
           style={{
             marginTop:      '1.25rem',
@@ -277,7 +246,129 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
         </div>
       </motion.div>
 
-      {/* Disclaimer */}
+      {/* ── Email capture ──────────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.35 }}
+        style={{
+          background:  'var(--color-ink-900)',
+          border:      '1px solid var(--color-ink-800)',
+          borderLeft:  '2px solid var(--color-brass-600)',
+          padding:     '1.5rem',
+        }}
+      >
+        {!submitted ? (
+          <>
+            <p
+              style={{
+                fontFamily:    'var(--font-mono)',
+                fontSize:      '0.6rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color:         'var(--color-brass-500)',
+                marginBottom:  '0.5rem',
+              }}
+            >
+              Get a PDF copy
+            </p>
+            <p
+              style={{
+                fontFamily:   'var(--font-sans)',
+                fontSize:     '0.82rem',
+                fontWeight:   300,
+                color:        'var(--color-ink-300)',
+                lineHeight:   1.6,
+                marginBottom: '1rem',
+              }}
+            >
+              Want a PDF summary of your rate breakdown? Enter your email and we'll send it.
+            </p>
+            <form
+              onSubmit={handleEmailSubmit}
+              style={{ display: 'flex', gap: '0', flexDirection: 'column' as const }}
+            >
+              <div style={{ display: 'flex', gap: '2px' }}>
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  style={{
+                    flex:         1,
+                    background:   'var(--color-ink-950)',
+                    border:       '1px solid var(--color-ink-700)',
+                    color:        'var(--color-ink-100)',
+                    fontFamily:   'var(--font-mono)',
+                    fontSize:     '0.78rem',
+                    padding:      '0.6rem 0.85rem',
+                    outline:      'none',
+                    borderRadius: 0,
+                    minWidth:     0,
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--color-brass-500)';
+                    e.currentTarget.style.boxShadow   = '0 0 0 2px rgba(212,160,23,0.12)';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--color-ink-700)';
+                    e.currentTarget.style.boxShadow   = 'none';
+                  }}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    fontFamily:   'var(--font-mono)',
+                    fontSize:     '0.68rem',
+                    letterSpacing:'0.08em',
+                    textTransform:'uppercase',
+                    padding:      '0.6rem 1rem',
+                    background:   'var(--color-brass-500)',
+                    color:        'var(--color-ink-950)',
+                    border:       'none',
+                    cursor:       'pointer',
+                    fontWeight:   500,
+                    whiteSpace:   'nowrap',
+                  }}
+                >
+                  Send PDF
+                </button>
+              </div>
+            </form>
+            <p
+              style={{
+                fontFamily:    'var(--font-mono)',
+                fontSize:      '0.58rem',
+                color:         'var(--color-ink-700)',
+                letterSpacing: '0.04em',
+                marginTop:     '0.5rem',
+              }}
+            >
+              No spam. Unsubscribe anytime.
+            </p>
+          </>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '0.5rem 0' }}>
+            <p
+              style={{
+                fontFamily:    'var(--font-display)',
+                fontSize:      '1rem',
+                fontWeight:    700,
+                color:         'var(--color-brass-300)',
+                marginBottom:  '0.3rem',
+              }}
+            >
+              ✓ You're on the list
+            </p>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--color-ink-600)' }}>
+              We'll send your rate breakdown to {email}
+            </p>
+          </div>
+        )}
+      </motion.div>
+
+      {/* ── Disclaimer ─────────────────────────────────────── */}
       <p
         style={{
           fontFamily:    'var(--font-mono)',
