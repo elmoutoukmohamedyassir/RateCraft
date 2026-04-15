@@ -76,6 +76,23 @@ const BENEFITS = [
   },
 ];
 
+const TOOLS_PROMO = [
+  {
+    label:  'Hourly Rate Calculator',
+    desc:   'Find your minimum viable hourly rate based on income, taxes, expenses, and hours.',
+    path:   '/calculator',
+    cta:    'Calculate rate →',
+    accent: true,
+  },
+  {
+    label:  'Project Pricing Calculator',
+    desc:   'Build a full project quote including revisions, buffer, tax, and profit margin.',
+    path:   '/project-calculator',
+    cta:    'Price a project →',
+    accent: false,
+  },
+];
+
 const HERO_STATS = [
   { number: '6',    unit: 'variables', label: 'Drive the calculation' },
   { number: '100%', unit: '',          label: 'Runs in your browser'  },
@@ -224,8 +241,8 @@ export default function Home() {
             {/* CTA row */}
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <PrimaryButton to="/calculator">Calculate your real rate →</PrimaryButton>
-              <SecondaryButton to="/blog/how-to-calculate-freelance-rate">
-                See how to price your work
+              <SecondaryButton to="/project-calculator">
+                Price a project →
               </SecondaryButton>
             </div>
           </motion.div>
@@ -467,6 +484,110 @@ export default function Home() {
                   }}
                 >
                   {benefit.link.label}
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════ TOOLS */}
+      <section
+        style={{
+          borderTop:  '1px solid var(--color-ink-800)',
+          padding:    '5rem 1.5rem',
+        }}
+      >
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <p className="mono-label" style={{ marginBottom: '0.75rem' }}>Free tools</p>
+            <h2
+              style={{
+                fontFamily:    'var(--font-display)',
+                fontSize:      'clamp(1.8rem, 3.5vw, 2.5rem)',
+                fontWeight:    700,
+                color:         'var(--color-ink-50)',
+                letterSpacing: '-0.025em',
+              }}
+            >
+              Two calculators. One goal.
+            </h2>
+          </div>
+
+          <div
+            style={{
+              display:             'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap:                 '2px',
+              background:          'var(--color-ink-800)',
+            }}
+          >
+            {TOOLS_PROMO.map((tool) => (
+              <div
+                key={tool.path}
+                style={{
+                  background:    'var(--color-ink-900)',
+                  padding:       '2.25rem',
+                  position:      'relative',
+                  display:       'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                {tool.accent && (
+                  <div
+                    style={{
+                      position:   'absolute',
+                      top:        0,
+                      left:       0,
+                      right:      0,
+                      height:     '2px',
+                      background: 'linear-gradient(90deg, var(--color-brass-600), var(--color-brass-300))',
+                    }}
+                  />
+                )}
+                <p
+                  style={{
+                    fontFamily:    'var(--font-display)',
+                    fontSize:      '1.2rem',
+                    fontWeight:    700,
+                    color:         'var(--color-ink-50)',
+                    letterSpacing: '-0.01em',
+                    marginBottom:  '0.65rem',
+                  }}
+                >
+                  {tool.label}
+                </p>
+                <p
+                  style={{
+                    fontFamily:   'var(--font-sans)',
+                    fontSize:     '0.875rem',
+                    fontWeight:   300,
+                    color:        'var(--color-ink-400)',
+                    lineHeight:   1.7,
+                    marginBottom: '1.5rem',
+                    flex:         1,
+                  }}
+                >
+                  {tool.desc}
+                </p>
+                <Link
+                  to={tool.path}
+                  style={{
+                    fontFamily:     'var(--font-mono)',
+                    fontSize:       '0.72rem',
+                    letterSpacing:  '0.1em',
+                    textTransform:  'uppercase',
+                    color:          tool.accent ? 'var(--color-ink-950)' : 'var(--color-brass-300)',
+                    background:     tool.accent ? 'var(--color-brass-500)' : 'transparent',
+                    border:         tool.accent ? 'none' : '1px solid var(--color-brass-600)',
+                    textDecoration: 'none',
+                    padding:        '0.65rem 1.25rem',
+                    display:        'inline-block',
+                    fontWeight:     tool.accent ? 500 : 400,
+                    alignSelf:      'flex-start',
+                  }}
+                >
+                  {tool.cta}
                 </Link>
               </div>
             ))}

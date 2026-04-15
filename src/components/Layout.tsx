@@ -4,10 +4,11 @@ import { Footer }                     from './Footer';
 
 /* ── Nav links ─────────────────────────────────────────────────── */
 const NAV_LINKS = [
-  { label: 'Calculator', path: '/calculator' },
-  { label: 'Blog',       path: '/blog'       },
-  { label: 'About',      path: '/about'      },
-  { label: 'Contact',    path: '/contact'    },
+  { label: 'Rate Calc',    path: '/calculator'         },
+  { label: 'Project Calc', path: '/project-calculator' },
+  { label: 'Blog',         path: '/blog'               },
+  { label: 'About',        path: '/about'              },
+  { label: 'Contact',      path: '/contact'            },
 ];
 
 /* ── Layout ────────────────────────────────────────────────────── */

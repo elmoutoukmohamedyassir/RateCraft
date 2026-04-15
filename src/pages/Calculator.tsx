@@ -25,6 +25,14 @@ const RELATED_POSTS = [
   { id: 'profit-margin-for-freelancers',     label: 'Why freelancers need a profit margin'           },
 ];
 
+/* ── Cross-tool link ───────────────────────────────────────────── */
+const PROJECT_CALC_PROMO = {
+  title: 'Need to price an entire project?',
+  desc:  'Use the project pricing calculator to build a full quote — including revisions, scope buffer, tax, and profit margin.',
+  path:  '/project-calculator',
+  cta:   'Open project calculator →',
+};
+
 /* ── Calculator page ───────────────────────────────────────────── */
 export default function CalculatorPage() {
   const [state,   setState]   = useState<CalculatorState>(INITIAL_STATE);
@@ -382,6 +390,55 @@ export default function CalculatorPage() {
                   </p>
                 </div>
               ))}
+            </div>
+
+            {/* Project calculator cross-link */}
+            <div
+              style={{
+                marginTop:   '2.5rem',
+                marginBottom:'2rem',
+                padding:     '1.5rem',
+                background:  'var(--color-ink-800)',
+                border:      '1px solid var(--color-ink-700)',
+              }}
+            >
+              <p
+                style={{
+                  fontFamily:    'var(--font-display)',
+                  fontSize:      '0.95rem',
+                  fontWeight:    700,
+                  color:         'var(--color-ink-100)',
+                  marginBottom:  '0.4rem',
+                  letterSpacing: '-0.01em',
+                }}
+              >
+                {PROJECT_CALC_PROMO.title}
+              </p>
+              <p
+                style={{
+                  fontFamily:   'var(--font-sans)',
+                  fontSize:     '0.82rem',
+                  fontWeight:   300,
+                  color:        'var(--color-ink-400)',
+                  lineHeight:   1.65,
+                  marginBottom: '0.85rem',
+                }}
+              >
+                {PROJECT_CALC_PROMO.desc}
+              </p>
+              <Link
+                to={PROJECT_CALC_PROMO.path}
+                style={{
+                  fontFamily:     'var(--font-mono)',
+                  fontSize:       '0.68rem',
+                  letterSpacing:  '0.1em',
+                  textTransform:  'uppercase',
+                  color:          'var(--color-brass-300)',
+                  textDecoration: 'none',
+                }}
+              >
+                {PROJECT_CALC_PROMO.cta}
+              </Link>
             </div>
 
             {/* Related reading */}

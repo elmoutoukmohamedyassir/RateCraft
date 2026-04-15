@@ -4,7 +4,7 @@ import { motion }           from 'motion/react';
 import { SEO }              from '../components/SEO';
 
 /* ── Types ─────────────────────────────────────────────────────── */
-interface Post {
+export interface Post {
   id:       string;
   title:    string;
   excerpt:  string;
@@ -14,7 +14,7 @@ interface Post {
   image:    string;
 }
 
-/* ── Post data ─────────────────────────────────────────────────── */
+/* ── Post list ─────────────────────────────────────────────────── */
 export const ALL_POSTS: Post[] = [
   {
     id:       'how-to-calculate-freelance-rate',
@@ -117,13 +117,13 @@ export const ALL_POSTS: Post[] = [
   },
 ];
 
-/* ── Category color map ────────────────────────────────────────── */
-const CATEGORY_COLORS: Record<string, string> = {
-  Strategy:   '#e8b830',
-  Pricing:    '#3abba8',
-  Finance:    '#a78bfa',
-  Beginner:   '#60a5fa',
-  Business:   '#f87171',
+/* ── Category colors ───────────────────────────────────────────── */
+export const CATEGORY_COLORS: Record<string, string> = {
+  Strategy:    '#e8b830',
+  Pricing:     '#3abba8',
+  Finance:     '#a78bfa',
+  Beginner:    '#60a5fa',
+  Business:    '#f87171',
   Productivity:'#34d399',
 };
 
@@ -138,32 +138,30 @@ export default function BlogIndex() {
       ? ALL_POSTS
       : ALL_POSTS.filter((p) => p.category === activeCategory);
 
-  // Schema markup for SEO
-  const blogListSchema = {
+  const blogSchema = {
     '@context':  'https://schema.org',
     '@type':     'Blog',
-    name:        'RateCraft Journal',
+    name:        'RateCrafts Journal',
     description: 'Practical guides on freelance pricing, billable hours, profitability, and building a sustainable business.',
-    url:         'https://ratecraft.io/blog',
+    url:         'https://ratecrafts.io/blog',
     blogPost:    ALL_POSTS.map((p) => ({
-      '@type':       'BlogPosting',
-      headline:       p.title,
-      datePublished:  p.date,
-      url:           `https://ratecraft.io/blog/${p.id}`,
+      '@type':      'BlogPosting',
+      headline:      p.title,
+      datePublished: p.date,
+      url:          `https://ratecrafts.io/blog/${p.id}`,
     })),
   };
 
   return (
     <div style={{ background: 'var(--color-ink-950)', minHeight: '100vh' }}>
       <SEO
-        title="Freelance Pricing Blog | RateCraft Journal"
+        title="Freelance Pricing Blog | RateCrafts Journal"
         description="Practical guides on freelance hourly rates, pricing strategy, billable hours, and building a profitable freelance business."
       >
-        <script type="application/ld+json">{JSON.stringify(blogListSchema)}</script>
-        <link rel="canonical" href="https://ratecraft.io/blog" />
+        <script type="application/ld+json">{JSON.stringify(blogSchema)}</script>
       </SEO>
 
-      {/* ── Header ─────────────────────────────────────────── */}
+      {/* ── Header ─────────────────────────────────────── */}
       <header
         style={{
           padding:      '5rem 1.5rem 4rem',
@@ -172,8 +170,8 @@ export default function BlogIndex() {
           overflow:     'hidden',
         }}
       >
-        {/* Grid bg */}
         <div
+          aria-hidden="true"
           style={{
             position:        'absolute',
             inset:           0,
@@ -203,7 +201,7 @@ export default function BlogIndex() {
               marginBottom:  '1.25rem',
             }}
           >
-            The RateCraft
+            The RateCrafts
             <br />
             <em style={{ color: 'var(--color-brass-300)', fontStyle: 'italic' }}>Journal</em>
           </h1>
@@ -214,16 +212,16 @@ export default function BlogIndex() {
               fontSize:     '1rem',
               fontWeight:   300,
               color:        'var(--color-ink-300)',
-              maxWidth:     '460px',
+              maxWidth:     '480px',
               lineHeight:   1.75,
               marginBottom: '2rem',
             }}
           >
-            Practical guides on freelance pricing, billable hours, and
-            building a business that lasts — starting with knowing your number.
+            Learn how to price your work, protect your margins, and build a
+            freelance business that lasts.
           </p>
 
-          {/* Internal link to calculator — strong SEO signal */}
+          {/* CTA to calculator */}
           <Link
             to="/calculator"
             style={{
@@ -238,15 +236,14 @@ export default function BlogIndex() {
               textDecoration: 'none',
               border:         '1px solid rgba(212,160,23,0.3)',
               padding:        '0.5rem 1rem',
-              transition:     'all 0.2s',
             }}
           >
-            → Try the free rate calculator
+            → Calculate your real rate — free tool
           </Link>
         </motion.div>
       </header>
 
-      {/* ── Category filter tabs ────────────────────────────── */}
+      {/* ── Category tabs ──────────────────────────────── */}
       <div
         style={{
           borderBottom:   '1px solid var(--color-ink-800)',
@@ -259,14 +256,7 @@ export default function BlogIndex() {
           overflowX:      'auto',
         }}
       >
-        <div
-          style={{
-            maxWidth: '1280px',
-            margin:   '0 auto',
-            display:  'flex',
-            gap:      0,
-          }}
-        >
+        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex' }}>
           {ALL_CATEGORIES.map((cat) => (
             <CategoryTab
               key={cat}
@@ -279,16 +269,10 @@ export default function BlogIndex() {
         </div>
       </div>
 
-      {/* ── Main content ───────────────────────────────────── */}
-      <main
-        style={{
-          maxWidth: '1280px',
-          margin:   '0 auto',
-          padding:  '3rem 1.5rem 6rem',
-        }}
-      >
+      {/* ── Posts ──────────────────────────────────────── */}
+      <main style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.5rem 6rem' }}>
 
-        {/* Featured post (only when showing All) */}
+        {/* Featured post (All view only) */}
         {activeCategory === 'All' && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -300,7 +284,7 @@ export default function BlogIndex() {
           </motion.div>
         )}
 
-        {/* Post grid */}
+        {/* Grid */}
         <div
           style={{
             display:             'grid',
@@ -324,17 +308,17 @@ export default function BlogIndex() {
           )}
         </div>
 
-        {/* ── Bottom CTA with internal links ─────────────── */}
+        {/* Bottom CTA */}
         <div
           style={{
-            marginTop:   '4rem',
-            padding:     '2.5rem',
-            background:  'var(--color-ink-900)',
-            border:      '1px solid var(--color-ink-800)',
-            borderLeft:  '2px solid var(--color-brass-500)',
-            display:     'flex',
+            marginTop:    '4rem',
+            padding:      '2.5rem',
+            background:   'var(--color-ink-900)',
+            border:       '1px solid var(--color-ink-800)',
+            borderLeft:   '2px solid var(--color-brass-500)',
+            display:      'flex',
             flexDirection:'column',
-            gap:         '1.25rem',
+            gap:          '1.25rem',
           }}
         >
           <p
@@ -348,20 +332,18 @@ export default function BlogIndex() {
           >
             Ready to apply what you've learned?
           </p>
-
           <p
             style={{
-              fontFamily:   'var(--font-display)',
-              fontSize:     '1.35rem',
-              fontWeight:   700,
-              color:        'var(--color-ink-50)',
-              letterSpacing:'-0.02em',
-              lineHeight:   1.25,
+              fontFamily:    'var(--font-display)',
+              fontSize:      '1.35rem',
+              fontWeight:    700,
+              color:         'var(--color-ink-50)',
+              letterSpacing: '-0.02em',
+              lineHeight:    1.25,
             }}
           >
-            Stop reading about rates. Go calculate yours.
+            Stop reading. Go calculate your rate.
           </p>
-
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
             <Link
               to="/calculator"
@@ -377,7 +359,7 @@ export default function BlogIndex() {
                 fontWeight:     500,
               }}
             >
-              Open Rate Calculator →
+              Calculate your real rate →
             </Link>
             <Link
               to="/about"
@@ -390,20 +372,7 @@ export default function BlogIndex() {
                 textDecoration: 'none',
               }}
             >
-              About RateCraft
-            </Link>
-            <Link
-              to="/contact"
-              style={{
-                fontFamily:     'var(--font-mono)',
-                fontSize:       '0.68rem',
-                letterSpacing:  '0.1em',
-                textTransform:  'uppercase',
-                color:          'var(--color-ink-500)',
-                textDecoration: 'none',
-              }}
-            >
-              Contact Us
+              About RateCrafts
             </Link>
           </div>
         </div>
@@ -415,18 +384,12 @@ export default function BlogIndex() {
 /* ── Sub-components ────────────────────────────────────────────── */
 
 function CategoryTab({
-  label,
-  active,
-  color,
-  onClick,
+  label, active, color, onClick,
 }: {
-  label:   string;
-  active:  boolean;
-  color?:  string;
-  onClick: () => void;
+  label: string; active: boolean; color?: string; onClick: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
-  const accentColor = color || 'var(--color-brass-500)';
+  const accent = color || 'var(--color-brass-500)';
 
   return (
     <button
@@ -441,14 +404,12 @@ function CategoryTab({
         padding:       '1rem 1.1rem',
         background:    'none',
         border:        'none',
-        borderBottom:  active
-          ? `2px solid ${accentColor}`
-          : '2px solid transparent',
-        color:      active ? accentColor : hovered ? 'var(--color-ink-200)' : 'var(--color-ink-500)',
-        cursor:     'pointer',
-        whiteSpace: 'nowrap',
-        transition: 'color 0.15s, border-color 0.15s',
-        marginBottom: '-1px',
+        borderBottom:  active ? `2px solid ${accent}` : '2px solid transparent',
+        color:         active ? accent : hovered ? 'var(--color-ink-200)' : 'var(--color-ink-500)',
+        cursor:        'pointer',
+        whiteSpace:    'nowrap',
+        transition:    'color 0.15s, border-color 0.15s',
+        marginBottom:  '-1px',
       }}
     >
       {label}
@@ -474,16 +435,8 @@ function FeaturedPost({ post }: { post: Post }) {
         transition:          'background 0.2s',
       }}
     >
-      {/* Text side */}
       <div style={{ padding: '2.5rem' }}>
-        <div
-          style={{
-            display:      'flex',
-            alignItems:   'center',
-            gap:          '0.75rem',
-            marginBottom: '1.5rem',
-          }}
-        >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
           <span
             style={{
               fontFamily:    'var(--font-mono)',
@@ -497,7 +450,6 @@ function FeaturedPost({ post }: { post: Post }) {
           >
             {post.category}
           </span>
-
           <span
             style={{
               fontFamily:    'var(--font-mono)',
@@ -540,49 +492,13 @@ function FeaturedPost({ post }: { post: Post }) {
           {post.excerpt}
         </p>
 
-        <div
-          style={{
-            display:    'flex',
-            alignItems: 'center',
-            gap:        '1.5rem',
-          }}
-        >
-          <span
-            style={{
-              fontFamily:    'var(--font-mono)',
-              fontSize:      '0.6rem',
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              color:         'var(--color-ink-600)',
-            }}
-          >
-            {post.date}
-          </span>
-          <span
-            style={{
-              fontFamily:    'var(--font-mono)',
-              fontSize:      '0.6rem',
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              color:         'var(--color-ink-600)',
-            }}
-          >
-            {post.readTime} read
-          </span>
-          <span
-            style={{
-              fontFamily:    'var(--font-mono)',
-              fontSize:      '0.68rem',
-              color:         'var(--color-brass-400)',
-              marginLeft:    'auto',
-            }}
-          >
-            Read →
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--color-ink-600)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{post.date}</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--color-ink-600)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{post.readTime} read</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--color-brass-400)', marginLeft: 'auto' }}>Read →</span>
         </div>
       </div>
 
-      {/* Image side */}
       <div style={{ minHeight: '240px', overflow: 'hidden' }}>
         <img
           src={post.image}
@@ -621,7 +537,6 @@ function PostCard({ post }: { post: Post }) {
         transition:     'background 0.2s',
       }}
     >
-      {/* Image */}
       <div style={{ height: '170px', overflow: 'hidden', flexShrink: 0 }}>
         <img
           src={post.image}
@@ -638,24 +553,8 @@ function PostCard({ post }: { post: Post }) {
         />
       </div>
 
-      {/* Content */}
-      <div
-        style={{
-          padding:       '1.5rem',
-          flex:          1,
-          display:       'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {/* Meta row */}
-        <div
-          style={{
-            display:      'flex',
-            alignItems:   'center',
-            justifyContent:'space-between',
-            marginBottom: '0.85rem',
-          }}
-        >
+      <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
           <span
             style={{
               fontFamily:    'var(--font-mono)',
@@ -669,20 +568,11 @@ function PostCard({ post }: { post: Post }) {
           >
             {post.category}
           </span>
-          <span
-            style={{
-              fontFamily:    'var(--font-mono)',
-              fontSize:      '0.56rem',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              color:         'var(--color-ink-600)',
-            }}
-          >
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-ink-600)' }}>
             {post.readTime}
           </span>
         </div>
 
-        {/* Title */}
         <h2
           style={{
             fontFamily:    'var(--font-display)',
@@ -698,7 +588,6 @@ function PostCard({ post }: { post: Post }) {
           {post.title}
         </h2>
 
-        {/* Excerpt */}
         <p
           style={{
             fontFamily:   'var(--font-sans)',
@@ -712,7 +601,6 @@ function PostCard({ post }: { post: Post }) {
           {post.excerpt}
         </p>
 
-        {/* Footer row */}
         <div
           style={{
             display:        'flex',
@@ -722,26 +610,10 @@ function PostCard({ post }: { post: Post }) {
             paddingTop:     '0.9rem',
           }}
         >
-          <span
-            style={{
-              fontFamily:    'var(--font-mono)',
-              fontSize:      '0.58rem',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              color:         'var(--color-ink-600)',
-            }}
-          >
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-ink-600)' }}>
             {post.date}
           </span>
-          <span
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize:   '0.65rem',
-              color:      'var(--color-brass-500)',
-            }}
-          >
-            →
-          </span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--color-brass-500)' }}>→</span>
         </div>
       </div>
     </Link>

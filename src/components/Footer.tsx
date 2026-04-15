@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 
 /* ── Data ──────────────────────────────────────────────────────── */
 const PRODUCT_LINKS = [
-  { label: 'Rate Calculator', path: '/calculator' },
-  { label: 'Blog',            path: '/blog'       },
-  { label: 'About',           path: '/about'      },
-  { label: 'Contact',         path: '/contact'    },
+  { label: 'Rate Calculator',     path: '/calculator'         },
+  { label: 'Project Calculator',  path: '/project-calculator' },
+  { label: 'Blog',                path: '/blog'               },
+  { label: 'About',               path: '/about'              },
+  { label: 'Contact',             path: '/contact'            },
 ];
 
 const LEGAL_LINKS = [
