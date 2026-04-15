@@ -2,115 +2,144 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://ratecrafts.com/</loc>
+    <loc>https://www.ratecrafts.com/</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/calculator</loc>
+    <loc>https://www.ratecrafts.com/calculator</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog</loc>
+    <loc>https://www.ratecrafts.com/blog</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/about</loc>
+    <loc>https://www.ratecrafts.com/about</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/contact</loc>
+    <loc>https://www.ratecrafts.com/contact</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/how-to-calculate-freelance-rate</loc>
+    <loc>https://www.ratecrafts.com/blog/how-to-calculate-freelance-rate</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/hourly-vs-project-pricing</loc>
+    <loc>https://www.ratecrafts.com/blog/hourly-vs-project-pricing</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/hidden-costs-of-freelancing</loc>
+    <loc>https://www.ratecrafts.com/blog/hidden-costs-of-freelancing</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/freelance-pricing-mistakes</loc>
+    <loc>https://www.ratecrafts.com/blog/freelance-pricing-mistakes</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/beginner-freelancer-rate</loc>
+    <loc>https://www.ratecrafts.com/blog/beginner-freelancer-rate</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/raising-your-rates</loc>
+    <loc>https://www.ratecrafts.com/blog/raising-your-rates</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/daily-rate-calculation</loc>
+    <loc>https://www.ratecrafts.com/blog/daily-rate-calculation</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/profit-margin-for-freelancers</loc>
+    <loc>https://www.ratecrafts.com/blog/profit-margin-for-freelancers</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/billable-hours-guide</loc>
+    <loc>https://www.ratecrafts.com/blog/billable-hours-guide</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/quote-a-project-profitably</loc>
+    <loc>https://www.ratecrafts.com/blog/quote-a-project-profitably</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://ratecrafts.com/blog/freelance-rate-too-low</loc>
+    <loc>https://www.ratecrafts.com/blog/freelance-rate-too-low</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+
+  <url>
+    <loc>https://www.ratecrafts.com/project-calculator</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.ratecrafts.com/privacy</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://www.ratecrafts.com/disclaimer</loc>
+    <lastmod>2026-04-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://www.ratecrafts.com/terms</loc>
+    <lastmod>2026-04-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 
 </urlset>
