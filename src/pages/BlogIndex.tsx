@@ -143,12 +143,12 @@ export default function BlogIndex() {
     '@type':     'Blog',
     name:        'RateCrafts Journal',
     description: 'Practical guides on freelance pricing, billable hours, profitability, and building a sustainable business.',
-    url:         'https://ratecrafts.io/blog',
+    url:         'https://www.ratecrafts.com/blog',
     blogPost:    ALL_POSTS.map((p) => ({
       '@type':      'BlogPosting',
       headline:      p.title,
       datePublished: p.date,
-      url:          `https://ratecrafts.io/blog/${p.id}`,
+      url:          `https://www.ratecrafts.com/blog/${p.id}`,
     })),
   };
 

@@ -381,8 +381,8 @@ export default function BlogPost() {
     datePublished:  post.date,
     description:    post.description,
     author:         { '@type': 'Organization', name: 'RateCrafts' },
-    publisher:      { '@type': 'Organization', name: 'RateCrafts', url: 'https://ratecrafts.io' },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://ratecrafts.io/blog/${id}` },
+    publisher:      { '@type': 'Organization', name: 'RateCrafts', url: 'https://www.ratecrafts.com' },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://www.ratecrafts.com/blog/${id}` },
   };
 
   /* ── Render ────────────────────────────────────────────── */
@@ -395,7 +395,7 @@ export default function BlogPost() {
         articleDate={post.date}
       >
         <script type="application/ld+json">{JSON.stringify(articleSchema)}</script>
-        <link rel="canonical" href={`https://ratecrafts.io/blog/${id}`} />
+        <link rel="canonical" href={`https://www.ratecrafts.com/blog/${id}`} />
       </SEO>
 
       {/* ── Sticky top bar ─────────────────────────────── */}
