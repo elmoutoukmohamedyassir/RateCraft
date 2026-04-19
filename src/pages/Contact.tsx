@@ -4,27 +4,16 @@ import { motion }         from 'motion/react';
 import { SEO }            from '../components/SEO';
 import { Mail, MessageSquare } from 'lucide-react';
 
-/* ── Contact ───────────────────────────────────────────────────── */
 export default function Contact() {
   return (
     <div style={{ background: 'var(--color-ink-950)', minHeight: '100vh' }}>
       <SEO
-        title="Contact | RateCrafts"
-        description="Get in touch with the RateCrafts project — for feedback, feature suggestions, or general questions."
+        title="Contact | RateCrafts — Freelance Rate Calculator"
+        description="Get in touch with the RateCrafts project. Questions, feedback, or feature ideas — every message gets read."
       />
 
-      <main
-        style={{
-          maxWidth:  '720px',
-          margin:    '0 auto',
-          padding:   '5rem 1.5rem 6rem',
-        }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
+      <main style={{ maxWidth: '720px', margin: '0 auto', padding: '5rem 1.5rem 6rem' }}>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
           <p className="mono-label" style={{ marginBottom: '1.25rem' }}>Contact</p>
 
           <h1
@@ -38,7 +27,7 @@ export default function Contact() {
               marginBottom:  '1rem',
             }}
           >
-            Get in Touch
+            Say hello
           </h1>
 
           <p
@@ -52,9 +41,9 @@ export default function Contact() {
               maxWidth:     '480px',
             }}
           >
-            RateCrafts is an independent project. If you have a question, a
-            suggestion, or just want to say the tool helped — reach out. Every
-            message gets read.
+            RateCrafts is an independent project, not a company. If you have a
+            question, a feature suggestion, or want to say the tool helped — reach
+            out. Every message gets read.
           </p>
 
           {/* Contact cards */}
@@ -70,14 +59,14 @@ export default function Contact() {
             {[
               {
                 Icon:  Mail,
-                title: 'General',
-                desc:  'Questions, feedback, or anything else.',
+                title: 'General questions',
+                desc:  'Anything about the calculator, how it works, or the numbers behind it.',
                 email: 'elmoutoukmohamedyassir@gmail.com',
               },
               {
                 Icon:  MessageSquare,
-                title: 'Feature suggestions',
-                desc:  'Have an idea to make the calculator better?',
+                title: 'Feature ideas',
+                desc:  'Built something on top of RateCrafts? Have a feature request? Tell me.',
                 email: 'impact.me02@gmail.com',
               },
             ].map(({ Icon, title, desc, email }) => (
@@ -124,7 +113,7 @@ export default function Contact() {
                     fontSize:   '0.82rem',
                     fontWeight: 300,
                     color:      'var(--color-ink-400)',
-                    lineHeight: 1.6,
+                    lineHeight: 1.65,
                   }}
                 >
                   {desc}
@@ -147,7 +136,7 @@ export default function Contact() {
             ))}
           </div>
 
-          {/* Quote */}
+          {/* Note */}
           <div
             style={{
               background:  'var(--color-ink-900)',
@@ -167,20 +156,14 @@ export default function Contact() {
                 margin:     0,
               }}
             >
-              "I try to respond within 24–48 hours. RateCrafts is a side project
-              — your feedback directly shapes what gets built next."
+              "I try to respond within 48 hours. This is a solo project — your feedback
+              directly shapes what gets built next. If you found the calculator useful
+              and want to see it improved, I want to hear from you."
             </p>
           </div>
 
-          {/* Navigation links */}
-          <div
-            style={{
-              marginTop:   '2.5rem',
-              display:     'flex',
-              gap:         '1.5rem',
-              flexWrap:    'wrap',
-            }}
-          >
+          {/* Nav */}
+          <div style={{ marginTop: '2.5rem', display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
             <Link
               to="/calculator"
               style={{
@@ -193,6 +176,19 @@ export default function Contact() {
               }}
             >
               Try the calculator →
+            </Link>
+            <Link
+              to="/project-calculator"
+              style={{
+                fontFamily:     'var(--font-mono)',
+                fontSize:       '0.68rem',
+                letterSpacing:  '0.1em',
+                textTransform:  'uppercase',
+                color:          'var(--color-ink-600)',
+                textDecoration: 'none',
+              }}
+            >
+              Project pricing calculator
             </Link>
             <Link
               to="/about"

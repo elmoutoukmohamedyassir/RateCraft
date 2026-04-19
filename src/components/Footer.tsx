@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 
 /* ── Data ──────────────────────────────────────────────────────── */
 const PRODUCT_LINKS = [
-  { label: 'Rate Calculator',     path: '/calculator'         },
-  { label: 'Project Calculator',  path: '/project-calculator' },
-  { label: 'Blog',                path: '/blog'               },
-  { label: 'About',               path: '/about'              },
-  { label: 'Contact',             path: '/contact'            },
+  { label: 'Hourly Rate Calculator', path: '/calculator'         },
+  { label: 'Project Price Calculator', path: '/project-calculator' },
+  { label: 'Freelance Pricing Blog', path: '/blog'               },
+  { label: 'About RateCrafts',       path: '/about'              },
+  { label: 'Contact',                path: '/contact'            },
 ];
 
 const LEGAL_LINKS = [
@@ -17,9 +17,9 @@ const LEGAL_LINKS = [
 ];
 
 const TRUST_SIGNALS = [
-  'Free tool, no signup',
-  'Built for freelancers',
-  'Updated regularly',
+  'Free forever',
+  'No account needed',
+  'Zero data collected',
 ];
 
 /* ── Footer ────────────────────────────────────────────────────── */
@@ -35,27 +35,22 @@ export function Footer() {
         paddingBottom: '2rem',
       }}
     >
-      <div
-        style={{
-          maxWidth: '1280px',
-          margin:   '0 auto',
-          padding:  '0 1.5rem',
-        }}
-      >
-        {/* ── Trust signals row ────────────────────────── */}
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem' }}>
+
+        {/* ── Trust bar ────────────────────────────────── */}
         <div
           style={{
-            display:        'flex',
-            gap:            '1.5rem',
-            flexWrap:       'wrap',
-            marginBottom:   '3rem',
-            paddingBottom:  '2rem',
-            borderBottom:   '1px solid var(--color-ink-800)',
+            display:       'flex',
+            gap:           '1.5rem',
+            flexWrap:      'wrap',
+            marginBottom:  '3rem',
+            paddingBottom: '2rem',
+            borderBottom:  '1px solid var(--color-ink-800)',
           }}
         >
-          {TRUST_SIGNALS.map((signal) => (
+          {TRUST_SIGNALS.map((s) => (
             <span
-              key={signal}
+              key={s}
               style={{
                 display:       'flex',
                 alignItems:    'center',
@@ -68,7 +63,7 @@ export function Footer() {
               }}
             >
               <span style={{ color: 'var(--color-brass-600)', fontSize: '0.55rem' }}>✓</span>
-              {signal}
+              {s}
             </span>
           ))}
         </div>
@@ -84,10 +79,7 @@ export function Footer() {
         >
           {/* Brand */}
           <div style={{ gridColumn: 'span 2' }}>
-            <Link
-              to="/"
-              style={{ textDecoration: 'none', display: 'inline-block', marginBottom: '1rem' }}
-            >
+            <Link to="/" style={{ textDecoration: 'none', display: 'inline-block', marginBottom: '1rem' }}>
               <span
                 style={{
                   fontFamily:    'var(--font-display)',
@@ -109,11 +101,24 @@ export function Footer() {
                 color:        'var(--color-ink-400)',
                 lineHeight:   1.75,
                 maxWidth:     '300px',
+                marginBottom: '0.75rem',
+              }}
+            >
+              The freelance rate calculator that accounts for taxes, expenses, and profit margin — not just your income goal.
+            </p>
+
+            <p
+              style={{
+                fontFamily:   'var(--font-sans)',
+                fontSize:     '0.82rem',
+                fontWeight:   300,
+                color:        'var(--color-ink-600)',
+                lineHeight:   1.7,
+                maxWidth:     '300px',
                 marginBottom: '1.25rem',
               }}
             >
-              A free, independent tool built to help freelancers charge
-              what they're actually worth. No ads, no tracking, no signup.
+              Independent. No ads. No investors. Built to help freelancers charge what they're actually worth.
             </p>
 
             <a
@@ -130,7 +135,7 @@ export function Footer() {
             </a>
           </div>
 
-          {/* Product links */}
+          {/* Product */}
           <div>
             <p
               style={{
@@ -142,14 +147,12 @@ export function Footer() {
                 marginBottom:  '1.25rem',
               }}
             >
-              Product
+              Tools &amp; Content
             </p>
-            {PRODUCT_LINKS.map((link) => (
-              <FooterLink key={link.path} label={link.label} path={link.path} />
-            ))}
+            {PRODUCT_LINKS.map((l) => <FooterLink key={l.path} label={l.label} path={l.path} />)}
           </div>
 
-          {/* Legal links */}
+          {/* Legal */}
           <div>
             <p
               style={{
@@ -163,13 +166,11 @@ export function Footer() {
             >
               Legal
             </p>
-            {LEGAL_LINKS.map((link) => (
-              <FooterLink key={link.path} label={link.label} path={link.path} />
-            ))}
+            {LEGAL_LINKS.map((l) => <FooterLink key={l.path} label={l.label} path={l.path} />)}
           </div>
         </div>
 
-        {/* ── Bottom bar ───────────────────────────────── */}
+        {/* ── Bottom ───────────────────────────────────── */}
         <div
           style={{
             borderTop:      '1px solid var(--color-ink-800)',
@@ -189,9 +190,8 @@ export function Footer() {
               color:         'var(--color-ink-600)',
             }}
           >
-            © {year} RateCrafts — An independent tool for the freelance community
+            © {year} RateCrafts — Freelance pricing tools for independent professionals
           </p>
-
           <div
             style={{
               width:      '2rem',
@@ -208,7 +208,6 @@ export function Footer() {
 /* ── FooterLink ────────────────────────────────────────────────── */
 function FooterLink({ label, path }: { label: string; path: string }) {
   const [hovered, setHovered] = React.useState(false);
-
   return (
     <Link
       to={path}

@@ -1,102 +1,100 @@
-import React, { useState }           from 'react';
+import React, { useState } from 'react';
 import { Link }                       from 'react-router-dom';
 import { motion, AnimatePresence }    from 'motion/react';
 import { SEO }                        from '../components/SEO';
 
-/* ── Static data ───────────────────────────────────────────────── */
-
+/* ── FAQ data ──────────────────────────────────────────────────── */
 const FAQS = [
   {
-    question: 'Is this calculator really free?',
-    answer:   'Yes — completely free, forever. No account, no credit card, no catches. RateCrafts is an independent tool built for the freelance community.',
+    question: 'Is RateCrafts really free?',
+    answer:   'Yes — completely free, forever. No account, no credit card, no premium tier. The calculation runs in your browser and nothing is ever sent to a server.',
   },
   {
-    question: 'How accurate are the calculations?',
-    answer:   'The results are as accurate as the numbers you enter. The formula accounts for taxes, expenses, billable hours, and profit margin — far more reliable than guessing or copying a competitor rate.',
+    question: 'Why does this give a different number than other calculators?',
+    answer:   'Most calculators divide a salary goal by 52 weeks and 40 hours. That formula ignores taxes, business expenses, realistic billable hours, and profit margin — so it consistently produces rates that are too low. RateCrafts accounts for all four.',
   },
   {
-    question: 'Do you store my financial data?',
-    answer:   'No. Every calculation runs entirely in your browser. Nothing is sent to a server. Your numbers stay on your device, always.',
+    question: 'How many billable hours per week should I enter?',
+    answer:   'Be honest — most freelancers bill 20 to 28 hours per week once admin, sales, revisions, and client communication are factored in. Using 40 will produce a rate that is too low. Start with 25 and adjust from there.',
+  },
+  {
+    question: 'What tax rate should I use?',
+    answer:   'Use your combined self-employment and income tax rate. US freelancers typically use 28–35%. UK freelancers on standard rate: around 28–32% including NI. If you are unsure, 30% is a conservative and commonly safe starting point.',
   },
   {
     question: "What is the profit margin buffer?",
-    answer:   "It adds a safety cushion on top of your base rate — for slow months, unexpected costs, savings, and growth. Without it your business breaks even at best.",
+    answer:   'It is an extra percentage added to your rate above and beyond break-even — to cover slow months, equipment failures, future investments, and actual business growth. Without it, your business survives but never thrives. 10–15% is a reasonable minimum.',
   },
 ];
 
+/* ── Blog previews ─────────────────────────────────────────────── */
 const BLOG_PREVIEWS = [
   {
     id:       'how-to-calculate-freelance-rate',
-    title:    'How to Calculate Your Freelance Rate: A Step-by-Step Guide',
+    title:    'Why the $29/hr Rate You Calculated Last Year Is Wrong',
     date:     'April 5, 2026',
     category: 'Strategy',
+    excerpt:  'Most freelancers calculate their rate once, get a number that feels too high, and immediately discount it. Here is the math that shows they should have gone the other way.',
     image:    'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=800&q=80',
   },
   {
     id:       'hidden-costs-of-freelancing',
-    title:    '7 Hidden Costs of Freelancing That Destroy Profit Margins',
+    title:    '7 Costs Freelancers Build Into Their Lifestyle Instead of Their Rate',
     date:     'April 2, 2026',
     category: 'Finance',
+    excerpt:  'Slow internet you upgraded for client calls. The chair that helps your back. The time you spend on proposals. None of these are personal expenses.',
     image:    'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80',
   },
   {
-    id:       'raising-your-rates',
-    title:    'How to Raise Your Rates Without Losing Good Clients',
-    date:     'March 28, 2026',
-    category: 'Business',
-    image:    'https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=800&q=80',
+    id:       'freelance-rate-too-low',
+    title:    'Fully Booked, Still Broke: The Rate Problem Nobody Talks About',
+    date:     'March 16, 2026',
+    category: 'Strategy',
+    excerpt:  'Busy freelancers often blame the wrong thing — client quality, niche, platform. The actual problem is almost always pricing.',
+    image:    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
   },
 ];
 
+/* ── Who it is for ─────────────────────────────────────────────── */
 const WHO_ITS_FOR = [
-  { role: 'Developers',    desc: 'Set a rate that covers your tools, taxes, and time.' },
-  { role: 'Designers',     desc: 'Price creative work with a real financial foundation.' },
-  { role: 'Consultants',   desc: 'Build a day rate grounded in your actual costs.'       },
-  { role: 'Copywriters',   desc: 'Stop guessing. Know your minimum viable hourly floor.' },
-];
-
-const BENEFITS = [
   {
-    number:  '01',
-    title:   'Taxes & expenses included',
-    desc:    'Most calculators ignore what you owe the government and what it costs to run your business. RateCrafts bakes both in — so your rate covers your actual life, not just your time.',
-    link:    { label: 'See hidden freelance costs →', path: '/blog/hidden-costs-of-freelancing' },
+    role: 'Developers',
+    desc: 'Your rate needs to cover the SaaS stack you maintain, the learning time between projects, and the tax bill that arrives in January. A $50/hr rate that ignores those is not really $50/hr.',
   },
   {
-    number:  '02',
-    title:   'Realistic billable hours',
-    desc:    'You cannot bill 40 hours a week. Admin, sales, revisions, and communication eat into that number. RateCrafts uses your real available hours — not an optimistic guess.',
-    link:    { label: 'Learn about billable hours →', path: '/blog/billable-hours-guide' },
+    role: 'Designers',
+    desc: 'Creative work is routinely underpriced because it looks effortless. Your rate should reflect the exploration, the revisions, the expertise — not just the final file.',
   },
   {
-    number:  '03',
-    title:   'Profit margin built in',
-    desc:    'A rate that only covers break-even is a rate that keeps you fragile. Add a profit buffer and your business survives slow months, bad clients, and unexpected costs.',
-    link:    { label: 'Why profit margin matters →', path: '/blog/profit-margin-for-freelancers' },
+    role: 'Consultants',
+    desc: 'Day rates are common in consulting. But a day rate set without understanding your hourly floor can leave significant money on the table across a year of engagements.',
+  },
+  {
+    role: 'Copywriters',
+    desc: 'Research, interviews, briefing calls, revisions, and client education all happen before a word gets written. If your rate only prices the writing, you are undercharging.',
   },
 ];
 
-const TOOLS_PROMO = [
+/* ── Three differentiators ─────────────────────────────────────── */
+const DIFFERENTIATORS = [
   {
-    label:  'Hourly Rate Calculator',
-    desc:   'Find your minimum viable hourly rate based on income, taxes, expenses, and hours.',
-    path:   '/calculator',
-    cta:    'Calculate rate →',
-    accent: true,
+    number: '01',
+    title:  'Tax-aware by default',
+    body:   'Self-employment adds a second layer of tax that employees never see. In the US, it is 15.3% on top of income tax. In the UK, Class 4 NI kicks in on profits above £12,570. RateCrafts builds this in as a mandatory input — not an optional footnote.',
+    link:   { label: 'Read: 7 hidden costs of freelancing →', path: '/blog/hidden-costs-of-freelancing' },
   },
   {
-    label:  'Project Pricing Calculator',
-    desc:   'Build a full project quote including revisions, buffer, tax, and profit margin.',
-    path:   '/project-calculator',
-    cta:    'Price a project →',
-    accent: false,
+    number: '02',
+    title:  'Honest about billable hours',
+    body:   'The 40-hour week is a fiction for most freelancers. Proposals, admin, calls, revisions, and invoicing are real work that rarely gets billed. RateCrafts defaults to 25 billable hours per week — and lets you adjust to your reality.',
+    link:   { label: 'Read: How many billable hours are realistic? →', path: '/blog/billable-hours-guide' },
   },
-];
-
-const HERO_STATS = [
-  { number: '6',    unit: 'variables', label: 'Drive the calculation' },
-  { number: '100%', unit: '',          label: 'Runs in your browser'  },
-  { number: '∞',    unit: '',          label: 'Recalculates live'     },
+  {
+    number: '03',
+    title:  'Profit margin, not just break-even',
+    body:   'A rate that covers your costs is a rate that keeps you in business but never builds one. The profit margin input is not optional — it is what separates a sustainable freelance practice from a cash flow treadmill.',
+    link:   { label: 'Read: Why margin matters more than revenue →', path: '/blog/profit-margin-for-freelancers' },
+  },
 ];
 
 /* ── Home ──────────────────────────────────────────────────────── */
@@ -106,8 +104,8 @@ export default function Home() {
   return (
     <div>
       <SEO
-        title="Freelance Rate Calculator | RateCrafts"
-        description="Calculate your freelance hourly rate based on income goals, taxes, expenses, and billable hours. Free tool, no signup required."
+        title="Freelance Hourly Rate Calculator | RateCrafts"
+        description="Calculate your freelance hourly rate based on income goals, taxes, expenses, and realistic billable hours. Free tool, no signup. Used by developers, designers, and consultants."
       />
 
       {/* ══════════════════════════════════════════════════ HERO */}
@@ -118,10 +116,9 @@ export default function Home() {
           alignItems: 'center',
           position:   'relative',
           overflow:   'hidden',
-          padding:    '6rem 1.5rem 4rem',
+          padding:    '7rem 1.5rem 5rem',
         }}
       >
-        {/* Grid background */}
         <div
           aria-hidden="true"
           style={{
@@ -129,52 +126,30 @@ export default function Home() {
             inset:           0,
             backgroundImage: 'linear-gradient(var(--color-ink-800) 1px, transparent 1px), linear-gradient(90deg, var(--color-ink-800) 1px, transparent 1px)',
             backgroundSize:  '56px 56px',
-            opacity:         0.3,
+            opacity:         0.28,
             pointerEvents:   'none',
           }}
         />
-        {/* Radial glow */}
         <div
           aria-hidden="true"
           style={{
-            position:     'absolute',
-            top:          '10%',
-            left:         '50%',
-            width:        '800px',
-            height:       '800px',
-            background:   'radial-gradient(circle, rgba(212,160,23,0.06) 0%, transparent 65%)',
-            pointerEvents:'none',
-            transform:    'translateX(-50%)',
+            position:      'absolute',
+            top:           '15%',
+            left:          '55%',
+            width:         '700px',
+            height:        '700px',
+            background:    'radial-gradient(circle, rgba(212,160,23,0.07) 0%, transparent 65%)',
+            pointerEvents: 'none',
           }}
         />
 
-        <div
-          style={{
-            maxWidth:  '1280px',
-            margin:    '0 auto',
-            position:  'relative',
-            zIndex:    1,
-            width:     '100%',
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            {/* Problem statement */}
+        <div style={{ maxWidth: '1280px', margin: '0 auto', position: 'relative', zIndex: 1, width: '100%' }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+
+            {/* Eyebrow */}
             <p
-              style={{
-                fontFamily:    'var(--font-mono)',
-                fontSize:      '0.7rem',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color:         'var(--color-brass-500)',
-                marginBottom:  '1.75rem',
-                display:       'flex',
-                alignItems:    'center',
-                gap:           '0.75rem',
-              }}
+              className="mono-label"
+              style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}
             >
               <span
                 style={{
@@ -185,10 +160,10 @@ export default function Home() {
                   flexShrink: 0,
                 }}
               />
-              Most freelancers undercharge
+              Freelance rate calculator — free, no signup
             </p>
 
-            {/* Headline — the solution */}
+            {/* Headline */}
             <h1
               style={{
                 fontFamily:    'var(--font-display)',
@@ -198,17 +173,17 @@ export default function Home() {
                 lineHeight:    0.97,
                 letterSpacing: '-0.03em',
                 maxWidth:      '820px',
-                marginBottom:  '2rem',
+                marginBottom:  '1.75rem',
               }}
             >
-              Calculate your
+              Most freelancers
               <br />
               <em style={{ color: 'var(--color-brass-300)', fontStyle: 'italic' }}>
-                real hourly rate.
+                undercharge.
               </em>
             </h1>
 
-            {/* Sub-headline */}
+            {/* Sub */}
             <p
               style={{
                 fontFamily:   'var(--font-sans)',
@@ -217,41 +192,51 @@ export default function Home() {
                 color:        'var(--color-ink-300)',
                 lineHeight:   1.75,
                 maxWidth:     '520px',
-                marginBottom: '2.5rem',
+                marginBottom: '0.85rem',
               }}
             >
-              Enter your income goal, taxes, expenses, and available hours.
-              Get a rate that actually covers your business — not just your time.
+              Not because they lack skills. Because their rate was calculated with the
+              wrong formula — one that ignores taxes, realistic hours, and profit margin.
             </p>
+
+            <p
+              style={{
+                fontFamily:    'var(--font-mono)',
+                fontSize:      '0.7rem',
+                letterSpacing: '0.1em',
+                color:         'var(--color-brass-500)',
+                marginBottom:  '2.25rem',
+                textTransform: 'uppercase',
+              }}
+            >
+              RateCrafts fixes that in 90 seconds.
+            </p>
+
+            {/* CTAs */}
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
+              <PrimaryButton to="/calculator">Calculate your real rate →</PrimaryButton>
+              <GhostButton to="/project-calculator">Price a project →</GhostButton>
+            </div>
 
             {/* Trust micro-copy */}
             <p
               style={{
                 fontFamily:    'var(--font-mono)',
-                fontSize:      '0.62rem',
-                letterSpacing: '0.1em',
-                color:         'var(--color-ink-600)',
+                fontSize:      '0.6rem',
+                letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                marginBottom:  '2rem',
+                color:         'var(--color-ink-700)',
               }}
             >
-              Free · No signup · 100% private
+              Free · No account · Runs in your browser · Zero data collected
             </p>
-
-            {/* CTA row */}
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <PrimaryButton to="/calculator">Calculate your real rate →</PrimaryButton>
-              <SecondaryButton to="/project-calculator">
-                Price a project →
-              </SecondaryButton>
-            </div>
           </motion.div>
 
           {/* Stats strip */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
+            transition={{ delay: 0.55, duration: 0.45 }}
             style={{
               marginTop:           '5rem',
               paddingTop:          '2.5rem',
@@ -260,9 +245,13 @@ export default function Home() {
               gridTemplateColumns: 'repeat(3, 1fr)',
             }}
           >
-            {HERO_STATS.map((stat, i) => (
+            {[
+              { n: '6',    unit: 'inputs',  label: 'Drive every calculation' },
+              { n: '100%', unit: '',         label: 'Runs client-side only'   },
+              { n: '∞',    unit: '',         label: 'Updates in real time'    },
+            ].map((s, i) => (
               <div
-                key={stat.label}
+                key={s.label}
                 style={{
                   padding:     '1.25rem 1.5rem',
                   borderRight: i < 2 ? '1px solid var(--color-ink-800)' : 'none',
@@ -278,17 +267,10 @@ export default function Home() {
                     letterSpacing: '-0.03em',
                   }}
                 >
-                  {stat.number}
-                  {stat.unit && (
-                    <span
-                      style={{
-                        fontFamily:  'var(--font-mono)',
-                        fontSize:    '0.7rem',
-                        color:       'var(--color-brass-400)',
-                        marginLeft:  '0.35rem',
-                      }}
-                    >
-                      {stat.unit}
+                  {s.n}
+                  {s.unit && (
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--color-brass-400)', marginLeft: '0.3rem' }}>
+                      {s.unit}
                     </span>
                   )}
                 </p>
@@ -302,7 +284,7 @@ export default function Home() {
                     marginTop:     '0.3rem',
                   }}
                 >
-                  {stat.label}
+                  {s.label}
                 </p>
               </div>
             ))}
@@ -310,17 +292,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════ WHO IT'S FOR */}
+      {/* ══════════════════════════════════════════════ WHO IT'S FOR */}
       <section
         style={{
           borderTop:  '1px solid var(--color-ink-800)',
           background: 'var(--color-ink-900)',
-          padding:    '5rem 1.5rem',
+          padding:    '5.5rem 1.5rem',
         }}
       >
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <p className="mono-label" style={{ marginBottom: '0.75rem' }}>Who it's for</p>
+          <div style={{ marginBottom: '3.5rem', maxWidth: '600px' }}>
+            <p className="mono-label" style={{ marginBottom: '0.85rem' }}>Who it's for</p>
             <h2
               style={{
                 fontFamily:    'var(--font-display)',
@@ -331,14 +313,16 @@ export default function Home() {
                 lineHeight:    1.1,
               }}
             >
-              If you sell your time, this tool is for you.
+              If you bill for your time,
+              <br />
+              this number matters.
             </h2>
           </div>
 
           <div
             style={{
               display:             'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
               gap:                 '2px',
               background:          'var(--color-ink-800)',
             }}
@@ -347,8 +331,11 @@ export default function Home() {
               <div
                 key={item.role}
                 style={{
-                  background: 'var(--color-ink-950)',
-                  padding:    '2rem 1.75rem',
+                  background:    'var(--color-ink-950)',
+                  padding:       '2rem 1.75rem',
+                  display:       'flex',
+                  flexDirection: 'column',
+                  gap:           '0.65rem',
                 }}
               >
                 <p
@@ -357,7 +344,6 @@ export default function Home() {
                     fontSize:      '1.15rem',
                     fontWeight:    700,
                     color:         'var(--color-ink-50)',
-                    marginBottom:  '0.6rem',
                     letterSpacing: '-0.01em',
                   }}
                 >
@@ -369,7 +355,7 @@ export default function Home() {
                     fontSize:   '0.875rem',
                     fontWeight: 300,
                     color:      'var(--color-ink-400)',
-                    lineHeight: 1.65,
+                    lineHeight: 1.7,
                   }}
                 >
                   {item.desc}
@@ -379,16 +365,16 @@ export default function Home() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-            <OutlineButton to="/calculator">Calculate your rate for free →</OutlineButton>
+            <OutlineButton to="/calculator">Find your rate — free →</OutlineButton>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════ BENEFITS */}
+      {/* ═══════════════════════════════════════════ DIFFERENTIATORS */}
       <section style={{ padding: '6rem 1.5rem', borderTop: '1px solid var(--color-ink-800)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-            <p className="mono-label" style={{ marginBottom: '0.75rem' }}>Why it works</p>
+            <p className="mono-label" style={{ marginBottom: '0.85rem' }}>What's different</p>
             <h2
               style={{
                 fontFamily:    'var(--font-display)',
@@ -396,12 +382,12 @@ export default function Home() {
                 fontWeight:    700,
                 color:         'var(--color-ink-50)',
                 letterSpacing: '-0.025em',
-                lineHeight:    1.1,
-                maxWidth:      '600px',
-                margin:        '0 auto',
+                lineHeight:    1.15,
               }}
             >
-              Three things most calculators get wrong.
+              Three things most calculators
+              <br />
+              quietly leave out.
             </h2>
           </div>
 
@@ -413,9 +399,9 @@ export default function Home() {
               background:          'var(--color-ink-800)',
             }}
           >
-            {BENEFITS.map((benefit) => (
+            {DIFFERENTIATORS.map((d) => (
               <div
-                key={benefit.number}
+                key={d.number}
                 style={{
                   background:    'var(--color-ink-950)',
                   padding:       '2.25rem 2rem',
@@ -423,27 +409,17 @@ export default function Home() {
                   flexDirection: 'column',
                 }}
               >
-                <p
-                  style={{
-                    fontFamily:   'var(--font-mono)',
-                    fontSize:     '0.6rem',
-                    color:        'var(--color-ink-700)',
-                    marginBottom: '1.25rem',
-                    letterSpacing:'0.06em',
-                  }}
-                >
-                  {benefit.number}
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--color-ink-700)', marginBottom: '1.1rem', letterSpacing: '0.06em' }}>
+                  {d.number}
                 </p>
-
                 <div
                   style={{
                     width:        '1.5rem',
                     height:       '1px',
                     background:   'var(--color-brass-500)',
-                    marginBottom: '1.1rem',
+                    marginBottom: '1rem',
                   }}
                 />
-
                 <p
                   style={{
                     fontFamily:    'var(--font-display)',
@@ -451,143 +427,37 @@ export default function Home() {
                     fontWeight:    700,
                     color:         'var(--color-ink-50)',
                     marginBottom:  '0.75rem',
+                    letterSpacing: '-0.01em',
                     lineHeight:    1.3,
-                    letterSpacing: '-0.01em',
                   }}
                 >
-                  {benefit.title}
-                </p>
-
-                <p
-                  style={{
-                    fontFamily:  'var(--font-sans)',
-                    fontSize:    '0.875rem',
-                    fontWeight:  300,
-                    color:       'var(--color-ink-300)',
-                    lineHeight:  1.75,
-                    flex:        1,
-                    marginBottom:'1.25rem',
-                  }}
-                >
-                  {benefit.desc}
-                </p>
-
-                <Link
-                  to={benefit.link.path}
-                  style={{
-                    fontFamily:     'var(--font-mono)',
-                    fontSize:       '0.65rem',
-                    letterSpacing:  '0.08em',
-                    color:          'var(--color-brass-400)',
-                    textDecoration: 'none',
-                    textTransform:  'uppercase',
-                  }}
-                >
-                  {benefit.link.label}
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════ TOOLS */}
-      <section
-        style={{
-          borderTop:  '1px solid var(--color-ink-800)',
-          padding:    '5rem 1.5rem',
-        }}
-      >
-        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <p className="mono-label" style={{ marginBottom: '0.75rem' }}>Free tools</p>
-            <h2
-              style={{
-                fontFamily:    'var(--font-display)',
-                fontSize:      'clamp(1.8rem, 3.5vw, 2.5rem)',
-                fontWeight:    700,
-                color:         'var(--color-ink-50)',
-                letterSpacing: '-0.025em',
-              }}
-            >
-              Two calculators. One goal.
-            </h2>
-          </div>
-
-          <div
-            style={{
-              display:             'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap:                 '2px',
-              background:          'var(--color-ink-800)',
-            }}
-          >
-            {TOOLS_PROMO.map((tool) => (
-              <div
-                key={tool.path}
-                style={{
-                  background:    'var(--color-ink-900)',
-                  padding:       '2.25rem',
-                  position:      'relative',
-                  display:       'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                {tool.accent && (
-                  <div
-                    style={{
-                      position:   'absolute',
-                      top:        0,
-                      left:       0,
-                      right:      0,
-                      height:     '2px',
-                      background: 'linear-gradient(90deg, var(--color-brass-600), var(--color-brass-300))',
-                    }}
-                  />
-                )}
-                <p
-                  style={{
-                    fontFamily:    'var(--font-display)',
-                    fontSize:      '1.2rem',
-                    fontWeight:    700,
-                    color:         'var(--color-ink-50)',
-                    letterSpacing: '-0.01em',
-                    marginBottom:  '0.65rem',
-                  }}
-                >
-                  {tool.label}
+                  {d.title}
                 </p>
                 <p
                   style={{
                     fontFamily:   'var(--font-sans)',
                     fontSize:     '0.875rem',
                     fontWeight:   300,
-                    color:        'var(--color-ink-400)',
-                    lineHeight:   1.7,
-                    marginBottom: '1.5rem',
+                    color:        'var(--color-ink-300)',
+                    lineHeight:   1.75,
                     flex:         1,
+                    marginBottom: '1.25rem',
                   }}
                 >
-                  {tool.desc}
+                  {d.body}
                 </p>
                 <Link
-                  to={tool.path}
+                  to={d.link.path}
                   style={{
                     fontFamily:     'var(--font-mono)',
-                    fontSize:       '0.72rem',
-                    letterSpacing:  '0.1em',
-                    textTransform:  'uppercase',
-                    color:          tool.accent ? 'var(--color-ink-950)' : 'var(--color-brass-300)',
-                    background:     tool.accent ? 'var(--color-brass-500)' : 'transparent',
-                    border:         tool.accent ? 'none' : '1px solid var(--color-brass-600)',
+                    fontSize:       '0.63rem',
+                    letterSpacing:  '0.08em',
+                    color:          'var(--color-brass-400)',
                     textDecoration: 'none',
-                    padding:        '0.65rem 1.25rem',
-                    display:        'inline-block',
-                    fontWeight:     tool.accent ? 500 : 400,
-                    alignSelf:      'flex-start',
+                    textTransform:  'uppercase',
                   }}
                 >
-                  {tool.cta}
+                  {d.link.label}
                 </Link>
               </div>
             ))}
@@ -595,7 +465,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════ BLOG POSTS */}
+      {/* ════════════════════════════════════════════════ BLOG */}
       <section
         style={{
           borderTop:  '1px solid var(--color-ink-800)',
@@ -615,7 +485,7 @@ export default function Home() {
             }}
           >
             <div>
-              <p className="mono-label" style={{ marginBottom: '0.6rem' }}>From the blog</p>
+              <p className="mono-label" style={{ marginBottom: '0.6rem' }}>Freelance pricing, demystified</p>
               <h2
                 style={{
                   fontFamily:    'var(--font-display)',
@@ -625,10 +495,9 @@ export default function Home() {
                   letterSpacing: '-0.02em',
                 }}
               >
-                Learn how to price your work.
+                Articles worth reading.
               </h2>
             </div>
-
             <Link
               to="/blog"
               style={{
@@ -667,12 +536,7 @@ export default function Home() {
         }}
       >
         <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-          <p
-            className="mono-label"
-            style={{ textAlign: 'center', display: 'block', marginBottom: '1rem' }}
-          >
-            FAQ
-          </p>
+          <p className="mono-label" style={{ textAlign: 'center', display: 'block', marginBottom: '1rem' }}>FAQ</p>
           <h2
             style={{
               fontFamily:    'var(--font-display)',
@@ -699,7 +563,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════ BOTTOM CTA */}
+      {/* ═══════════════════════════════════════════════ BOTTOM CTA */}
       <section
         style={{
           borderTop:  '1px solid var(--color-ink-800)',
@@ -707,11 +571,8 @@ export default function Home() {
           padding:    '7rem 1.5rem',
         }}
       >
-        <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center' }}>
-          <p className="mono-label" style={{ display: 'block', marginBottom: '1.5rem' }}>
-            Get started — it's free
-          </p>
-
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <p className="mono-label" style={{ display: 'block', marginBottom: '1.5rem' }}>Takes under 90 seconds</p>
           <h2
             style={{
               fontFamily:    'var(--font-display)',
@@ -723,13 +584,12 @@ export default function Home() {
               marginBottom:  '1.5rem',
             }}
           >
-            Know your rate.
+            Stop guessing.
             <br />
             <em style={{ color: 'var(--color-brass-300)', fontStyle: 'italic' }}>
-              Charge with confidence.
+              Know your number.
             </em>
           </h2>
-
           <p
             style={{
               fontFamily:   'var(--font-sans)',
@@ -738,22 +598,24 @@ export default function Home() {
               color:        'var(--color-ink-400)',
               lineHeight:   1.75,
               marginBottom: '2.5rem',
-              maxWidth:     '460px',
+              maxWidth:     '420px',
               margin:       '0 auto 2.5rem',
             }}
           >
-            Takes under a minute. No account required. Your data never leaves your browser.
+            Enter your real numbers. Get a rate that holds up — to a client, to a
+            spreadsheet, to yourself.
           </p>
-
-          <PrimaryButton to="/calculator">Calculate your real rate →</PrimaryButton>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <PrimaryButton to="/calculator">Calculate your rate →</PrimaryButton>
+            <GhostButton to="/project-calculator">Price a project →</GhostButton>
+          </div>
         </div>
       </section>
     </div>
   );
 }
 
-/* ── Reusable sub-components ───────────────────────────────────── */
-
+/* ── Buttons ───────────────────────────────────────────────────── */
 function PrimaryButton({ to, children }: { to: string; children: React.ReactNode }) {
   const [hovered, setHovered] = useState(false);
   return (
@@ -780,7 +642,7 @@ function PrimaryButton({ to, children }: { to: string; children: React.ReactNode
   );
 }
 
-function SecondaryButton({ to, children }: { to: string; children: React.ReactNode }) {
+function GhostButton({ to, children }: { to: string; children: React.ReactNode }) {
   const [hovered, setHovered] = useState(false);
   return (
     <Link
@@ -832,13 +694,16 @@ function OutlineButton({ to, children }: { to: string; children: React.ReactNode
   );
 }
 
+/* ── BlogCard ──────────────────────────────────────────────────── */
 function BlogCard({
   post,
 }: {
-  post: { id: string; title: string; date: string; category: string; image: string };
+  post: {
+    id: string; title: string; date: string;
+    category: string; excerpt: string; image: string;
+  };
 }) {
   const [hovered, setHovered] = useState(false);
-
   return (
     <Link
       to={`/blog/${post.id}`}
@@ -853,7 +718,6 @@ function BlogCard({
         transition:     'background 0.2s',
       }}
     >
-      {/* Image */}
       <div style={{ height: '200px', overflow: 'hidden', flexShrink: 0 }}>
         <img
           src={post.image}
@@ -863,23 +727,14 @@ function BlogCard({
             width:      '100%',
             height:     '100%',
             objectFit:  'cover',
-            filter:     `brightness(${hovered ? 0.8 : 0.65}) sepia(0.2)`,
+            filter:     `brightness(${hovered ? 0.78 : 0.62}) sepia(0.2)`,
             transform:  hovered ? 'scale(1.04)' : 'scale(1)',
             transition: 'transform 0.4s ease, filter 0.3s ease',
           }}
         />
       </div>
-
-      {/* Content */}
-      <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <div
-          style={{
-            display:      'flex',
-            alignItems:   'center',
-            gap:          '0.75rem',
-            marginBottom: '0.85rem',
-          }}
-        >
+      <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <span
             style={{
               fontFamily:    'var(--font-mono)',
@@ -904,7 +759,6 @@ function BlogCard({
             {post.date}
           </span>
         </div>
-
         <h3
           style={{
             fontFamily:    'var(--font-display)',
@@ -913,21 +767,29 @@ function BlogCard({
             color:         'var(--color-ink-100)',
             lineHeight:    1.35,
             letterSpacing: '-0.01em',
-            flex:          1,
           }}
         >
           {post.title}
         </h3>
+        <p
+          style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize:   '0.82rem',
+            fontWeight: 300,
+            color:      'var(--color-ink-500)',
+            lineHeight: 1.65,
+          }}
+        >
+          {post.excerpt}
+        </p>
       </div>
     </Link>
   );
 }
 
+/* ── FaqItem ───────────────────────────────────────────────────── */
 function FaqItem({
-  faq,
-  isOpen,
-  isLast,
-  onToggle,
+  faq, isOpen, isLast, onToggle,
 }: {
   faq:      { question: string; answer: string };
   isOpen:   boolean;
@@ -958,24 +820,24 @@ function FaqItem({
       >
         <span
           style={{
-            fontFamily:    'var(--font-display)',
-            fontSize:      '1rem',
-            fontWeight:    700,
-            color:         'var(--color-ink-100)',
-            lineHeight:    1.4,
+            fontFamily: 'var(--font-display)',
+            fontSize:   '1rem',
+            fontWeight: 700,
+            color:      'var(--color-ink-100)',
+            lineHeight: 1.4,
           }}
         >
           {faq.question}
         </span>
         <span
           style={{
-            fontFamily:  'var(--font-mono)',
-            fontSize:    '1.1rem',
-            color:       'var(--color-brass-400)',
-            flexShrink:  0,
-            transform:   isOpen ? 'rotate(45deg)' : 'none',
-            transition:  'transform 0.2s ease',
-            display:     'block',
+            fontFamily: 'var(--font-mono)',
+            fontSize:   '1.1rem',
+            color:      'var(--color-brass-400)',
+            flexShrink: 0,
+            transform:  isOpen ? 'rotate(45deg)' : 'none',
+            transition: 'transform 0.2s ease',
+            display:    'block',
           }}
         >
           +
